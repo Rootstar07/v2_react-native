@@ -1,9 +1,11 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useState } from "react";
 import { ScrollView, StyleSheet, Text, View, Button } from "react-native";
 import startgame from "./startgame.js";
 
 export default function App() {
+  const [node, setNode] = useState(0);
+
   return (
     <View style={styles.container}>
       <View style={styles.titlebox}>
@@ -44,7 +46,8 @@ export default function App() {
         </ScrollView>
       </View>
       <View style={styles.buttonbox}>
-        <Button title="button1"></Button>
+        <Text>{}node</Text>
+        <Button title="button1" onPress={() => setNode(number + 1)}></Button>
         <Button title="button2"></Button>
         <Button title="button3"></Button>
       </View>
