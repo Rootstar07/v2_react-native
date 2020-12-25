@@ -8,10 +8,17 @@ export default function App() {
   const textNode = TextNodes[0]; //textNode는 TextNodes에서 배열 위치를 가져왔어요
   var title = textNode.title;
   var text = textNode.text;
+  var next_ID = 7;
 
   const onSetNode = () => {
-    setNode(node + 1);
+    const next_ID = textNode.options[0].nextID; //next_ID를 json의 next로 변경 -> 숫자로 하려면 Number(obj)
+    setNode(node + next_ID);
   };
+
+  const names = ["kendrick", "christopher", "theo", "dave"];
+  const buttonList = names.map((name) => (
+    <Button title={name} key={names.id} onPress={onSetNode}></Button>
+  )); //리스트를 받아 버튼 생성
 
   return (
     <View style={styles.container}>
@@ -23,13 +30,10 @@ export default function App() {
       <View style={styles.textbox}>
         <ScrollView>
           <Text>{text}</Text>
+          <Text>{next_ID}</Text>
         </ScrollView>
       </View>
-      <View style={styles.buttonbox}>
-        <Button title={textNode.options[0].text}></Button>
-        <Button title={textNode.options[1].text}></Button>
-        <Button title={textNode.options[2].text}></Button>
-      </View>
+      <View style={styles.buttonbox}>{buttonList}</View>
     </View>
   );
 }
@@ -51,7 +55,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   buttonbox: {
-    flex: 1.2,
+    flex: 1.5,
   },
 
   title: {
@@ -73,7 +77,7 @@ const TextNodes = [
       {
         text: "111111",
         setState: { blueGoo: true },
-        nextID: 2,
+        nextID: "2",
       },
       {
         text: "222222",
