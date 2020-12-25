@@ -13,7 +13,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <View style={styles.titlebox}>
-        <Text style={styles.title}>제목</Text>
+        <Text style={styles.title}>제목 : {node}</Text>
       </View>
       <View style={styles.textbox}>
         <ScrollView>
@@ -50,7 +50,6 @@ export default function App() {
         </ScrollView>
       </View>
       <View style={styles.buttonbox}>
-        <Text>{node}</Text>
         <Button title="button1" onPress={onSetNode}></Button>
         <Button title="button2"></Button>
         <Button title="button3"></Button>
