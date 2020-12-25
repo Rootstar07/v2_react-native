@@ -1,55 +1,37 @@
-import React, { Component } from "react";
+import { StatusBar } from "expo-status-bar";
+import React, { useState } from "react";
 import { ScrollView, StyleSheet, Text, View, Button } from "react-native";
 
-class App extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <View style={styles.titlebox}>
-          <Text style={styles.title}>제목</Text>
-        </View>
-        <View style={styles.textbox}>
-          <ScrollView>
-            <Text style={styles.text}>
-              내용 PUBLIC Stack Overflow Tags Users FIND A JOB Jobs Companies
-              TEAMS What’s this? Free 30 Day Trial React native scroll Text
-              horizontal Asked 3 years, 11 months ago Active 3 years, 11 months
-              ago Viewed 2k times 0 How to create a text scrolling bar in react
-              native? Like that of news scroll. Is it possible without using
-              Animation library? android react-native share improve this
-              question follow asked Jan 22 '17 at 13:00 Ujjwal Nepal 52944
-              silver badges1111 bronze badges add a comment 1 Answer 2 If you
-              want a user-controlled scroll you have a component for this -
-              ScrollView Here's a link to the official documentation -
-              https://facebook.github.io/react-native/docs/scrollview.html If
-              you want it to scroll automatically you need you use ScrollView
-              with the Animated library or use ScrollView's scrollTo function.
-              share improve this answer follow edited Jan 22 '17 at 14:51 PUBLIC
-              Stack Overflow Tags Users FIND A JOB Jobs Companies TEAMS What’s
-              this? Free 30 Day Trial React native scroll Text horizontal Asked
-              3 years, 11 months ago Active 3 years, 11 months ago Viewed 2k
-              times 0 How to create a text scrolling bar in react native? Like
-              that of news scroll. Is it possible without using Animation
-              library? android react-native share improve this question follow
-              asked Jan 22 '17 at 13:00 Ujjwal Nepal 52944 silver badges1111
-              bronze badges add a comment 1 Answer 2 If you want a
-              user-controlled scroll you have a component for this - ScrollView
-              Here's a link to the official documentation -
-              https://facebook.github.io/react-native/docs/scrollview.html If
-              you want it to scroll automatically you need you use ScrollView
-              with the Animated library or use ScrollView's scrollTo function.
-              share improve this answer follow edited Jan 22 '17 at 14:51
-            </Text>
-          </ScrollView>
-        </View>
-        <View style={styles.buttonbox}>
-          <Button title="button1"></Button>
-          <Button title="button2"></Button>
-          <Button title="button3"></Button>
-        </View>
+export default function App() {
+  const [node, setNode] = useState(0);
+
+  const textNode = TextNodes[0]; //textNode는 TextNodes에서 배열 위치를 가져왔어요
+  var title = textNode.title;
+  var text = textNode.text;
+
+  const onSetNode = () => {
+    setNode(node + 1);
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.titlebox}>
+        <Text style={styles.title}>
+          {title} : {node}
+        </Text>
       </View>
-    );
-  }
+      <View style={styles.textbox}>
+        <ScrollView>
+          <Text>{text}</Text>
+        </ScrollView>
+      </View>
+      <View style={styles.buttonbox}>
+        <Button title={textNode.options[0].text}></Button>
+        <Button title={textNode.options[1].text}></Button>
+        <Button title={textNode.options[2].text}></Button>
+      </View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -81,4 +63,28 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+const TextNodes = [
+  {
+    title: "Cien años de soledad",
+    id: 0,
+    text:
+      "몇 년이 지나 총살을 당하게 된 순간, 아우렐리아노 부엔디아 대령은 오래전 어느 오후 아버지에게 이끌려 얼음 구경을 하러 간 일을 떠올렸다",
+    options: [
+      {
+        text: "111111",
+        setState: { blueGoo: true },
+        nextID: 2,
+      },
+      {
+        text: "222222",
+        setState: { blueGoo: false },
+        nextID: 3,
+      },
+      {
+        text: "3333333",
+        setState: { blueGoo: false },
+        nextID: 3,
+      },
+    ],
+  },
+];
