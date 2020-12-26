@@ -10,9 +10,10 @@ export default function App() {
   const [buttonindex, SetButtonIndex] = useState(0); //실시간으로 바뀌는 것들은 모두 useState 사용
   const [buttonList2, setButtonList2] = useState([]);
 
-  //var Node_ID = 0;
+  const [test, setTest] = useState(0);
+  const [testnum, settestnum] = useState(0);
 
-  const onSetNode = () => {};
+  //var Node_ID = 0;
 
   const onSetButtonList = () => {
     //setIndex(TextNodes[index].buttonindex[0]); //수정필요 -> 버튼의 인덱스를 받아 수정
@@ -25,12 +26,16 @@ export default function App() {
       TextNodes[index].options.map((
         name //name이 TextNodes[0].options가 되는 기적!
       ) => (
-        <Button
-          title={name.text} //배열 안의 오브젝트라도 손쉽게 다룰수있게 되었다.
-          //key 지정
-          onPress={onSetNode}
-        ></Button>
+        <View>
+          <Text>{name.buttonID}</Text>
+          <Button
+            title={name.text} //배열 안의 오브젝트라도 손쉽게 다룰수있게 되었다.
+            //후속작업: key 지정
+            onPress={onSetNode}
+          ></Button>
+        </View>
       ))
+      //목표: 클릭한 버튼 ID값 찾아내기!
     );
   };
 
@@ -57,10 +62,10 @@ export default function App() {
   return (
     <View style={styles.container}>
       <View style={styles.titlebox}>
-        <Text style={styles.title}>
-          {toptext} : {node}
-        </Text>
+        <Text style={styles.title}>{toptext}</Text>
       </View>
+      <Text>현재 인덱스 : {index}</Text>
+      <Text>클릭한 버튼 ID : {test}</Text>
       <View style={styles.textbox}>
         <ScrollView>
           <Text>{downtext}</Text>
@@ -68,7 +73,6 @@ export default function App() {
       </View>
       <View style={styles.buttonbox}>
         <Button title="시작" onPress={onSetButtonList}></Button>
-
         <View>{buttonList2}</View>
       </View>
     </View>
