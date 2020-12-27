@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -14,22 +14,22 @@ export default function App() {
   const [toptext, setTopText] = useState("제목");
   const [downtext, setDownText] = useState("내용");
   const [index, setIndex] = useState(0);
-  const [buttonindex, SetButtonIndex] = useState(0); //실시간으로 바뀌는 것들은 모두 useState 사용
-  const [buttonList2, setButtonList2] = useState([]);
 
   const [test, setTest] = useState(0);
   const [testnum, settestnum] = useState(0);
 
   //var Node_ID = 0;
 
-  const onSetButtonList = () => {
+  const onSetPage = () => {
     //setIndex(TextNodes[index].buttonindex[0]); //수정필요 -> 버튼의 인덱스를 받아 수정
     // const Node_ID = textNode.options[0].nextID; //Node_ID를 json의 next로 변경 -> 숫자로 하려면 Number(obj)
 
     setNode(index); //현재는 초기값 : 0
     setTopText(TextNodes[index].title);
     setDownText(TextNodes[index].text);
-    setButtonList2(
+    settestnum(testnum + 1);
+
+    SetButtonList2(
       TextNodes[index].options.map((
         name //name이 TextNodes[0].options가 되는 기적!
       ) => (
@@ -37,16 +37,12 @@ export default function App() {
           <Button
             color="grey"
             title={name.text} //배열 안의 오브젝트라도 손쉽게 다룰수있게 되었다.
-            key={name.buttonID}
-            onPress={settestnum2(key)}
+            onPress={() => settestnum(testnum + 1)}
           ></Button>
         </View>
       ))
       //목표: 클릭한 버튼 ID값 찾아내기!
     );
-  };
-  const settestnum2 = () => {
-    settestnum(testnum + 1);
   };
 
   //버튼 생성기 ver.map
@@ -69,6 +65,12 @@ export default function App() {
   // <Text>{buttonindex}</Text>
   //));
 
+  //<Button title="시작" onPress={onSetPage} color="black"></Button>
+
+  const [buttonList2, SetButtonList2] = useState(
+    <Button title="hope" color="green" onPress={onSetPage}></Button>
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.titlebox}>
@@ -82,10 +84,8 @@ export default function App() {
           <Text>{downtext}</Text>
         </ScrollView>
       </View>
-      <View style={styles.buttonbox}>
-        <Button title="시작" onPress={onSetButtonList} color="black"></Button>
-        {buttonList2}
-      </View>
+
+      <View style={styles.buttonbox}>{buttonList2}</View>
     </View>
   );
 }
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   buttonbox: {
-    flex: 1.5,
+    flex: 2,
   },
 
   title: {
