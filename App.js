@@ -1,14 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  onPress,
-  TouchableOpacity,
-} from "react-native";
+import { ScrollView, StyleSheet, Text, View, Button } from "react-native";
 
 export default function App() {
   const [node, setNode] = useState(0);
@@ -16,9 +8,6 @@ export default function App() {
   const [downtext, setDownText] = useState("내용");
   const [index, setIndex] = useState(0);
   const [testnum, settestnum] = useState(0);
-  const [buttonindex, setbuttonindex] = useState(0);
-
-  var i;
 
   //var Node_ID = 0;
 
@@ -39,13 +28,17 @@ export default function App() {
           <Button
             color="grey"
             key={name.buttonID}
-            title={name.text} //배열 안의 오브젝트라도 손쉽게 다룰수있게 되었다.
-            onPress={OnSetTest(name.buttonID)}
+            title={name.text}
+            onPress={() => onSetHope(name.buttonID)} //배열 안의 오브젝트라도 손쉽게 다룰수있게 되었다.
           ></Button>
         </View>
       ))
       //목표: 클릭한 버튼 ID값 찾아내기!
     );
+  };
+
+  const onSetHope = (hope) => {
+    settestnum(hope);
   };
 
   const [buttonList2, SetButtonList2] = useState([
