@@ -31,7 +31,7 @@ export default function App() {
           <Button
             title={name.text} //배열 안의 오브젝트라도 손쉽게 다룰수있게 되었다.
             //후속작업: key 지정
-            onPress={onSetNode}
+            //onPress={onSetNode}
           ></Button>
         </View>
       ))
