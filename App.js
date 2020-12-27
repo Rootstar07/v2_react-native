@@ -24,21 +24,17 @@ export default function App() {
         name //name이 TextNodes[0].options가 되는 기적!
       ) => (
         <View>
-          <Text>{name.buttonID}</Text>
           <Button
             color="grey"
             key={name.buttonID}
             title={name.text}
-            onPress={() => onSetHope(name.buttonID)} //배열 안의 오브젝트라도 손쉽게 다룰수있게 되었다.
+            onPress={() => settestnum(name.buttonID)} //배열 안의 오브젝트라도 손쉽게 다룰수있게 되었다.
           ></Button>
         </View>
       ))
+      //12.26 버튼이 문제가 아니라 settestnum(여기)가 문제였다. 왜일까?
       //목표: 클릭한 버튼 ID값 찾아내기!
     );
-  };
-
-  const onSetHope = (hope) => {
-    settestnum(hope);
   };
 
   const [buttonList2, SetButtonList2] = useState([
@@ -71,7 +67,7 @@ export default function App() {
         <Text style={styles.title}>{toptext}</Text>
       </View>
       <Text>현재 인덱스 : {index}</Text>
-      <Text>테스트용 버튼 인덱스 : {testnum}</Text>
+      <Text>누른 버튼 ID : {testnum}</Text>
       <View style={styles.textbox}>
         <ScrollView>
           <Text>{downtext}</Text>
