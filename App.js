@@ -6,6 +6,7 @@ import {
   Text,
   View,
   Button,
+  onPress,
   TouchableOpacity,
 } from "react-native";
 
@@ -14,9 +15,10 @@ export default function App() {
   const [toptext, setTopText] = useState("제목");
   const [downtext, setDownText] = useState("내용");
   const [index, setIndex] = useState(0);
-
-  const [test, setTest] = useState(0);
   const [testnum, settestnum] = useState(0);
+  const [buttonindex, setbuttonindex] = useState(0);
+
+  var i;
 
   //var Node_ID = 0;
 
@@ -27,23 +29,28 @@ export default function App() {
     setNode(index); //현재는 초기값 : 0
     setTopText(TextNodes[index].title);
     setDownText(TextNodes[index].text);
-    settestnum(testnum + 1);
 
     SetButtonList2(
       TextNodes[index].options.map((
         name //name이 TextNodes[0].options가 되는 기적!
       ) => (
         <View>
+          <Text>{name.buttonID}</Text>
           <Button
             color="grey"
+            key={name.buttonID}
             title={name.text} //배열 안의 오브젝트라도 손쉽게 다룰수있게 되었다.
-            onPress={() => settestnum(testnum + 1)}
+            onPress={OnSetTest(name.buttonID)}
           ></Button>
         </View>
       ))
       //목표: 클릭한 버튼 ID값 찾아내기!
     );
   };
+
+  const [buttonList2, SetButtonList2] = useState([
+    <Button title="hope" color="black" onPress={onSetPage}></Button>,
+  ]);
 
   //버튼 생성기 ver.map
   //const names = ["kendrick", "christopher", "theo", "dave"];
@@ -65,26 +72,18 @@ export default function App() {
   // <Text>{buttonindex}</Text>
   //));
 
-  //<Button title="시작" onPress={onSetPage} color="black"></Button>
-
-  const [buttonList2, SetButtonList2] = useState(
-    <Button title="hope" color="green" onPress={onSetPage}></Button>
-  );
-
   return (
     <View style={styles.container}>
       <View style={styles.titlebox}>
         <Text style={styles.title}>{toptext}</Text>
       </View>
       <Text>현재 인덱스 : {index}</Text>
-      <Text>클릭한 버튼 ID : {test}</Text>
       <Text>테스트용 버튼 인덱스 : {testnum}</Text>
       <View style={styles.textbox}>
         <ScrollView>
           <Text>{downtext}</Text>
         </ScrollView>
       </View>
-
       <View style={styles.buttonbox}>{buttonList2}</View>
     </View>
   );
@@ -136,36 +135,42 @@ const TextNodes = [
         buttonID: 2,
         text: "무기를 꺼낸다.",
         setState: { blueGoo: false },
-        nextID: 3,
+        nextID: 1,
       },
       {
         buttonID: 3,
         text: "상황을 지켜본다.",
         setState: { blueGoo: false },
-        nextID: 3,
+        nextID: 1,
+      },
+      {
+        buttonID: 4,
+        text: "상황을 지켜본다.",
+        setState: { blueGoo: false },
+        nextID: 1,
       },
     ],
   },
   {
     title: "Cien años de soledad",
-    id: 0,
+    id: 1,
     text:
       "몇 년이 지나 총살을 당하게 된 순간, 아우렐리아노 부엔디아 대령은 오래전 어느 오후 아버지에게 이끌려 얼음 구경을 하러 간 일을 떠올렸다",
     options: [
       {
         text: "111111",
         setState: { blueGoo: true },
-        nextID: 2,
+        nextID: 0,
       },
       {
         text: "222222",
         setState: { blueGoo: false },
-        nextID: 3,
+        nextID: 0,
       },
       {
         text: "3333333",
         setState: { blueGoo: false },
-        nextID: 3,
+        nextID: 0,
       },
     ],
   },
