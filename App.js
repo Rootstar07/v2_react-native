@@ -159,7 +159,7 @@ const TextNodes = [
         buttonID: 2,
         text: "무기를 꺼낸다.",
         setState: { blueGoo: false },
-        nextID: 1,
+        nextID: 2,
       },
       {
         buttonID: 3,
@@ -180,6 +180,29 @@ const TextNodes = [
     id: 1,
     text:
       "조물주가 창조한 모든 것은 선하나, 인간의 손 안에서 모든 것은 타락한다.",
+    options: [
+      {
+        text: "111111",
+        setState: { blueGoo: true },
+        nextID: 0,
+      },
+      {
+        text: "222222",
+        setState: { blueGoo: false },
+        nextID: 0,
+      },
+      {
+        text: "3333333",
+        setState: { blueGoo: false },
+        nextID: 0,
+      },
+    ],
+  },
+  {
+    title: "Cien años de soledad",
+    id: 2,
+    text:
+      "나라말이 중국과 달라 한문·한자와 서로 통하지 아니하므로 이런 까닭으로 어리석은 백성들이 말하고자 하는 바가 있어도 끝내 제 뜻을 펴지 못하는 사람이 많다. 내가 이를 불쌍히 여겨 새로 스물 여덟 글자를 만드니 사람마다 하여금 쉽게 익혀 날마다 씀에 편하게 하고자 할 따름이다.",
     options: [
       {
         text: "111111",
