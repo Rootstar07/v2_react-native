@@ -1,6 +1,13 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import { ScrollView, StyleSheet, Text, View, Button } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  TouchableOpacity,
+} from "react-native";
 
 export default function App() {
   const [node, setNode] = useState(0);
@@ -27,16 +34,19 @@ export default function App() {
         name //name이 TextNodes[0].options가 되는 기적!
       ) => (
         <View>
-          <Text>{name.buttonID}</Text>
           <Button
+            color="grey"
             title={name.text} //배열 안의 오브젝트라도 손쉽게 다룰수있게 되었다.
-            //후속작업: key 지정
-            //onPress={onSetNode}
+            key={name.buttonID}
+            onPress={settestnum2(key)}
           ></Button>
         </View>
       ))
       //목표: 클릭한 버튼 ID값 찾아내기!
     );
+  };
+  const settestnum2 = () => {
+    settestnum(testnum + 1);
   };
 
   //버튼 생성기 ver.map
@@ -66,14 +76,15 @@ export default function App() {
       </View>
       <Text>현재 인덱스 : {index}</Text>
       <Text>클릭한 버튼 ID : {test}</Text>
+      <Text>테스트용 버튼 인덱스 : {testnum}</Text>
       <View style={styles.textbox}>
         <ScrollView>
           <Text>{downtext}</Text>
         </ScrollView>
       </View>
       <View style={styles.buttonbox}>
-        <Button title="시작" onPress={onSetButtonList}></Button>
-        <View>{buttonList2}</View>
+        <Button title="시작" onPress={onSetButtonList} color="black"></Button>
+        {buttonList2}
       </View>
     </View>
   );
