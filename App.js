@@ -1,6 +1,13 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { ScrollView, StyleSheet, Text, View, Button } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  SafeAreaView,
+} from "react-native";
 
 export default function App() {
   const [node, setNode] = useState(0);
@@ -39,28 +46,21 @@ export default function App() {
   };
 
   const onSetPage2 = (a) => {
-    //setIndex(TextNodes[index].buttonindex[0]); //수정필요 -> 버튼의 인덱스를 받아 수정
-    // const Node_ID = textNode.options[0].nextID; //Node_ID를 json의 next로 변경 -> 숫자로 하려면 Number(obj)
-
     setNode(a); //현재는 초기값 : 0
     setTopText(TextNodes[a].title);
     setDownText(TextNodes[a].text);
 
     SetButtonList2(
-      TextNodes[a].options.map((
-        name //name이 TextNodes[0].options가 되는 기적!
-      ) => (
+      TextNodes[a].options.map((name) => (
         <View>
           <Button
             color="grey"
             key={name.buttonID}
             title={name.text}
-            onPress={() => NeXtNode(name.nextID, name.buttonID)} //배열 안의 오브젝트라도 손쉽게 다룰수있게 되었다.
+            onPress={() => NeXtNode(name.nextID, name.buttonID)}
           ></Button>
         </View>
       ))
-      //12.26 버튼이 문제가 아니라 SetPressedButtonID(여기)가 문제였다. 왜일까?
-      //목표: 클릭한 버튼 ID값 찾아내기!
     );
   };
 
@@ -96,27 +96,81 @@ export default function App() {
   //));
 
   return (
-    <View style={styles.container}>
-      <View style={styles.titlebox}>
-        <Text style={styles.title}>{toptext}</Text>
+    <SafeAreaView style={styles.master}>
+      <View style={styles.uiContainer}>
+        <View style={styles.uiHamburger}></View>
+        <View style={styles.uiHPContainer}>
+          <Text style={styles.uiText}>체력</Text>
+          <Text style={styles.uiNum}>10</Text>
+        </View>
+        <View style={styles.uiPsyContainer}>
+          <Text style={styles.uiText}>정신</Text>
+          <Text style={styles.uiNum}>10</Text>
+        </View>
+        <View style={styles.uiBulletContainer}>
+          <Text style={styles.uiText}>총알</Text>
+          <Text style={styles.uiNum}>10</Text>
+        </View>
       </View>
-      <Text>현재 인덱스 : {index}</Text>
-      <Text>누른 버튼 ID : {PressedButtonID}</Text>
-      <Text>다음 버튼 ID : {nextButtonID}</Text>
-      <View style={styles.textbox}>
-        <ScrollView>
-          <Text>{downtext}</Text>
-        </ScrollView>
+      <View style={styles.container}>
+        <View style={styles.titlebox}>
+          <Text style={styles.title}>{toptext}</Text>
+        </View>
+        <Text>현재 인덱스 : {index}</Text>
+        <Text>누른 버튼 ID : {PressedButtonID}</Text>
+        <Text>다음 버튼 ID : {nextButtonID}</Text>
+        <View style={styles.textbox}>
+          <ScrollView>
+            <Text style={styles.text}>{downtext}</Text>
+          </ScrollView>
+        </View>
+        <View style={styles.buttonbox}>{buttonList2}</View>
       </View>
-      <View style={styles.buttonbox}>{buttonList2}</View>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  master: {
     flex: 1,
-    backgroundColor: "#fff",
+  },
+
+  uiContainer: {
+    flexDirection: "row",
+    flex: 1,
+    backgroundColor: "lightgrey",
+  },
+  uiText: {
+    fontSize: 15,
+  },
+  uiNum: {
+    fontSize: 30,
+    fontWeight: "bold",
+  },
+  uiHPContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  uiPsyContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  uiBulletContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  uiHamburger: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  container: {
+    flex: 7,
+    backgroundColor: "snow",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -127,7 +181,7 @@ const styles = StyleSheet.create({
   },
   textbox: {
     flex: 5,
-    marginHorizontal: 20,
+    marginHorizontal: 25,
   },
   buttonbox: {
     flex: 2,
@@ -182,16 +236,19 @@ const TextNodes = [
       "조물주가 창조한 모든 것은 선하나, 인간의 손 안에서 모든 것은 타락한다.",
     options: [
       {
+        buttonID: 1,
         text: "111111",
         setState: { blueGoo: true },
         nextID: 0,
       },
       {
+        buttonID: 2,
         text: "222222",
         setState: { blueGoo: false },
         nextID: 0,
       },
       {
+        buttonID: 3,
         text: "3333333",
         setState: { blueGoo: false },
         nextID: 0,
