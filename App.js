@@ -8,6 +8,9 @@ import {
   Button,
   SafeAreaView,
 } from "react-native";
+import nodesjson from "./nodesjson.json";
+
+var newNode = nodesjson;
 
 export default function App() {
   const [node, setNode] = useState(0);
