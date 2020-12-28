@@ -11,6 +11,9 @@ import {
 import data from "./nodesjson.json";
 
 var CrossRoad = data.nodesjson;
+var changedHP = 0;
+var changedPsy = 0;
+var changedBullet = 0;
 
 export default function App() {
   const [node, setNode] = useState(0);
@@ -19,10 +22,13 @@ export default function App() {
   const [index, setIndex] = useState(0);
   const [PressedButtonID, setPressedButtonID] = useState(0);
   const [nextButtonID, setNextButtonID] = useState(0);
+  const [HP, setHP] = useState(10);
+  const [Psy, setPsy] = useState(10);
+  const [Bullet, setBullet] = useState(0);
 
   //var Node_ID = 0;
 
-  const onSetPage = (nextID) => {
+  const onSetPage = () => {
     //setIndex(TextNodes[index].buttonindex[0]); //수정필요 -> 버튼의 인덱스를 받아 수정
     // const Node_ID = textNode.options[0].nextID; //Node_ID를 json의 next로 변경 -> 숫자로 하려면 Number(obj)
 
@@ -39,7 +45,7 @@ export default function App() {
             color="grey"
             key={name.buttonID}
             title={name.text}
-            onPress={() => NeXtNode(name.nextID, name.buttonID)} //배열 안의 오브젝트라도 손쉽게 다룰수있게 되었다.
+            onPress={() => NeXtNode(name.nextID, name.buttonID, name.setUI)} //배열 안의 오브젝트라도 손쉽게 다룰수있게 되었다.
           ></Button>
         </View>
       ))
@@ -60,18 +66,28 @@ export default function App() {
             color="grey"
             key={name.buttonID}
             title={name.text}
-            onPress={() => NeXtNode(name.nextID, name.buttonID)}
+            onPress={() => NeXtNode(name.nextID, name.buttonID, name.setUI)}
           ></Button>
         </View>
       ))
     );
   };
 
-  const NeXtNode = (nextID, nowID) => {
+  const onSetUI = (hp, psy, bullet) => {
+    changedHP = changedHP + hp;
+    changedPsy = changedPsy + psy;
+    changedBullet = changedBullet + bullet;
+    var nowHp = setHP(HP + changedHP);
+    var nowPsy = setPsy(Psy + changedPsy);
+    var nowBullet = setBullet(Bullet + changedBullet);
+  };
+
+  const NeXtNode = (nextID, nowID, UIdata) => {
     setPressedButtonID(nowID);
     setNextButtonID(nextID);
     setIndex(nextID);
     onSetPage2(nextID);
+    onSetUI(UIdata.setHP, UIdata.setPsy, UIdata.setBullet);
   };
 
   const [buttonList2, SetButtonList2] = useState([
@@ -104,15 +120,15 @@ export default function App() {
         <View style={styles.uiHamburger}></View>
         <View style={styles.uiHPContainer}>
           <Text style={styles.uiText}>체력</Text>
-          <Text style={styles.uiNum}>10</Text>
+          <Text style={styles.uiNum}>{HP}</Text>
         </View>
         <View style={styles.uiPsyContainer}>
           <Text style={styles.uiText}>정신</Text>
-          <Text style={styles.uiNum}>10</Text>
+          <Text style={styles.uiNum}>{Psy}</Text>
         </View>
         <View style={styles.uiBulletContainer}>
           <Text style={styles.uiText}>총알</Text>
-          <Text style={styles.uiNum}>10</Text>
+          <Text style={styles.uiNum}>{Bullet}</Text>
         </View>
       </View>
       <View style={styles.container}>
@@ -136,12 +152,12 @@ export default function App() {
 const styles = StyleSheet.create({
   master: {
     flex: 1,
+    backgroundColor: "snow",
   },
 
   uiContainer: {
     flexDirection: "row",
     flex: 1,
-    backgroundColor: "lightgrey",
   },
   uiText: {
     fontSize: 15,

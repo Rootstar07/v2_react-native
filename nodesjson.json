@@ -1,59 +1,61 @@
 { "nodesjson": [
     {
-      "title": "백년의 고독!",
+      "title": "새벽",
       "id": 0,
       "text":
-        "몇 년이 지나 총살을 당하게 된 순간, 아우렐리아노 부엔디아 대령은 오래전 어느 오후 아버지에게 이끌려 얼음 구경을 하러 간 일을 떠올렸다",
+        "문 밖에서 들리는 이상한 소리에 잠이 깼다. '고라니인가?' 동생은 내가 벽에 기대어 쉬고 있는 사이 재빨리 밖으로 나갔다.",
       "options": [
         {
           "buttonID": 1,
-          "text": "다가간다.",
+          "text": "동생을 따라간다.",
           "setState": { "blueGoo": true },
-          "nextID": 1
+          "nextID": 1,
+          "setUI": {"setHP": -1, "setPsy": -2, "setBullet": 0}
         },
         {
           "buttonID": 2,
-          "text": "무기를 꺼낸다.",
+          "text": "다시 잔다.",
           "setState": { "blueGoo": false },
-          "nextID": 2
+          "nextID": 2,
+          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
         },
         {
           "buttonID": 3,
           "text": "상황을 지켜본다.",
           "setState": { "blueGoo": false },
-          "nextID": 1
-        },
-        {
-          "buttonID": 4,
-          "text": "상황을 지켜본다.",
-          "setState": { "blueGoo": false },
-          "nextID": 1
+          "nextID": 1,
+          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
+          
         }
+        
       ]
     },
     {
-      "title": "Cien años de soledad",
+      "title": "두명의 사내",
       "id": 1,
       "text":
-        "조물주가 창조한 모든 것은 선하나, 인간의 손 안에서 모든 것은 타락한다.",
+        "나가보니 총을 든 두명의 사내가 안절부절하는 눈빛으로 동생에게 무언가를 설명하고 있었다.",
       "options": [
         {
           "buttonID": 1,
-          "text": "111111",
+          "text": "동생에게 다가가지 못하도록 막는다.",
           "setState": { "blueGoo": true },
-          "nextID": 0
+          "nextID": 2,
+          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
         },
         {
           "buttonID": 2,
-          "text": "222222",
+          "text": "그들을 말을 들어본다.",
           "setState": { "blueGoo": false },
-          "nextID": 0
+          "nextID": 0,
+          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
         },
         {
           "buttonID": 3,
-          "text": "3333333",
+          "text": "눈치를 보며 주변의 무기를 찾는다.",
           "setState": { "blueGoo": false },
-          "nextID": 2
+          "nextID": 2,
+          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
         }
       ]
     },
@@ -61,22 +63,25 @@
       "title": "Cien años de soledad",
       "id": 2,
       "text":
-        "나라말이 중국과 달라 한문·한자와 서로 통하지 아니하므로 이런 까닭으로 어리석은 백성들이 말하고자 하는 바가 있어도 끝내 제 뜻을 펴지 못하는 사람이 많다. 내가 이를 불쌍히 여겨 새로 스물 여덟 글자를 만드니 사람마다 하여금 쉽게 익혀 날마다 씀에 편하게 하고자 할 따름이다.",
+        "'누구십니까' 나는 최대한 긴장한 티를 내지 않도록 노력하며 그들에게 말하였다. '우린 사냥꾼들이오' 둘 중 키가 큰 사내가 말했다. 뼈대는 좋아보였으나 며칠을 굶은 탓인지 말라보였다. ",
       "options": [
         {
-          "text": "세종대왕",
+          "text": "그들에게 먹을 것을 내어 준다.",
           "setState": { "blueGoo": true },
-          "nextID": 0
+          "nextID": 0,
+          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
         },
         {
-          "text": "이순신",
+          "text": "그들을 내쫒는다.",
           "setState": { "blueGoo": false },
-          "nextID": 0
+          "nextID": 0,
+          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
         },
         {
-          "text": "유관순",
+          "text": "말을 좀 더 들어본다.",
           "setState": { "blueGoo": false },
-          "nextID": 0
+          "nextID": 0,
+          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
         }
       ]
     }
