@@ -7,6 +7,7 @@ import {
   View,
   Button,
   SafeAreaView,
+  TouchableOpacity,
 } from "react-native";
 import data from "./nodesjson.json";
 
@@ -17,8 +18,8 @@ var changedBullet = 0;
 
 export default function App() {
   const [node, setNode] = useState(0);
-  const [toptext, setTopText] = useState("제목");
-  const [downtext, setDownText] = useState("내용");
+  const [toptext, setTopText] = useState("");
+  const [downtext, setDownText] = useState("");
   const [index, setIndex] = useState(0);
   const [PressedButtonID, setPressedButtonID] = useState(0);
   const [nextButtonID, setNextButtonID] = useState(0);
@@ -40,17 +41,16 @@ export default function App() {
       CrossRoad[index].options.map((
         name //name이 TextNodes[0].options가 되는 기적!
       ) => (
-        <View>
-          <Button
-            color="grey"
-            key={name.buttonID}
-            title={name.text}
-            onPress={() => NeXtNode(name.nextID, name.buttonID, name.setUI)} //배열 안의 오브젝트라도 손쉽게 다룰수있게 되었다.
-          ></Button>
-        </View>
+        <TouchableOpacity
+          style={styles.TouchableOpacityDesign}
+          key={name.buttonID}
+          onPress={() => NeXtNode(name.nextID, name.buttonID, name.setUI)} //배열 안의 오브젝트라도 손쉽게 다룰수있게 되었다.
+        >
+          <Text style={styles.buttonFont}>{name.text}</Text>
+        </TouchableOpacity>
       ))
       //12.26 버튼이 문제가 아니라 SetPressedButtonID(여기)가 문제였다. 왜일까?
-      //목표: 클릭한 버튼 ID값 찾아내기!
+      //목표: 클릭한 버튼 ID값 찾아내기! - 해결
     );
   };
 
@@ -61,14 +61,13 @@ export default function App() {
 
     SetButtonList2(
       CrossRoad[a].options.map((name) => (
-        <View>
-          <Button
-            color="grey"
-            key={name.buttonID}
-            title={name.text}
-            onPress={() => NeXtNode(name.nextID, name.buttonID, name.setUI)}
-          ></Button>
-        </View>
+        <TouchableOpacity
+          style={styles.TouchableOpacityDesign}
+          key={name.buttonID}
+          onPress={() => NeXtNode(name.nextID, name.buttonID, name.setUI)}
+        >
+          <Text style={styles.buttonFont}>{name.text}</Text>
+        </TouchableOpacity>
       ))
     );
   };
@@ -91,32 +90,17 @@ export default function App() {
   };
 
   const [buttonList2, SetButtonList2] = useState([
-    <Button title="hope" color="black" onPress={onSetPage}></Button>,
+    <TouchableOpacity onPress={onSetPage}>
+      <View style={styles.startbutton}>
+        <Text style={styles.buttonFont2}>시작하기</Text>
+      </View>
+    </TouchableOpacity>,
   ]);
-
-  //버튼 생성기 ver.map
-  //const names = ["kendrick", "christopher", "theo", "dave"];
-  //const buttonList = names.map((name2) => (
-  //<Button title={name2} key={names.id} onPress={onSetNode}></Button>
-  //)); //리스트를 받아 버튼 생성
-
-  //const buttonList = TextNodes[index].options.map((
-  //name //name이 TextNodes[0].options가 되는 기적!
-  //) => (
-  //<Button
-  //title={name.text} //배열 안의 오브젝트라도 손쉽게 다룰수있게 되었다.
-  //key 지정
-  //onPress={onSetNode}
-  //></Button>
-  //));
-
-  // const buttonindexList = TextNodes[index].buttonindex.map((buttonindex) => (
-  // <Text>{buttonindex}</Text>
-  //));
 
   return (
     <SafeAreaView style={styles.master}>
-      <View style={styles.uiContainer}>
+      <View style={styles.safeArea}></View>
+      <View style={styles.TopArea}>
         <View style={styles.uiHamburger}></View>
         <View style={styles.uiHPContainer}>
           <Text style={styles.uiText}>체력</Text>
@@ -131,18 +115,17 @@ export default function App() {
           <Text style={styles.uiNum}>{Bullet}</Text>
         </View>
       </View>
-      <View style={styles.container}>
+      <View style={styles.MiddleArea}>
         <View style={styles.titlebox}>
           <Text style={styles.title}>{toptext}</Text>
         </View>
-        <Text>현재 인덱스 : {index}</Text>
-        <Text>누른 버튼 ID : {PressedButtonID}</Text>
-        <Text>다음 버튼 ID : {nextButtonID}</Text>
         <View style={styles.textbox}>
           <ScrollView>
             <Text style={styles.text}>{downtext}</Text>
           </ScrollView>
         </View>
+      </View>
+      <View style={styles.BottomArea}>
         <View style={styles.buttonbox}>{buttonList2}</View>
       </View>
     </SafeAreaView>
@@ -152,12 +135,15 @@ export default function App() {
 const styles = StyleSheet.create({
   master: {
     flex: 1,
-    backgroundColor: "snow",
+    backgroundColor: "#efeeee",
+  },
+  safeArea: {
+    flex: 0.7,
   },
 
-  uiContainer: {
+  TopArea: {
     flexDirection: "row",
-    flex: 1,
+    flex: 0.7,
   },
   uiText: {
     fontSize: 15,
@@ -187,9 +173,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  container: {
+  MiddleArea: {
     flex: 7,
-    backgroundColor: "snow",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -202,9 +187,35 @@ const styles = StyleSheet.create({
     flex: 5,
     marginHorizontal: 25,
   },
-  buttonbox: {
-    flex: 2,
+  BottomArea: {
+    flex: 2.5,
   },
+  TouchableOpacityDesign: {
+    borderRadius: 10, //테투리 설정
+    //backgroundColor: "#282825", //버튼 색깔
+    margin: 1, //버튼 사이 간격
+    marginHorizontal: 15, //버튼 폭
+    paddingHorizontal: 20, //버튼 내부 수평
+    paddingVertical: 10, //버튼 내부 수직
+    borderWidth: 2,
+    borderColor: "#282825",
+  },
+  buttonFont: {
+    fontSize: 17,
+    color: "black",
+  },
+  startbutton: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonFont2: {
+    fontSize: 17,
+    color: "black",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  buttonbox: {},
 
   title: {
     fontWeight: "bold",

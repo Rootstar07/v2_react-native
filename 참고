@@ -1,0 +1,19 @@
+ //버튼 생성기 ver.map
+  //const names = ["kendrick", "christopher", "theo", "dave"];
+  //const buttonList = names.map((name2) => (
+  //<Button title={name2} key={names.id} onPress={onSetNode}></Button>
+  //)); //리스트를 받아 버튼 생성
+
+  //const buttonList = TextNodes[index].options.map((
+  //name //name이 TextNodes[0].options가 되는 기적!
+  //) => (
+  //<Button
+  //title={name.text} //배열 안의 오브젝트라도 손쉽게 다룰수있게 되었다.
+  //key 지정
+  //onPress={onSetNode}
+  //></Button>
+  //));
+
+  // const buttonindexList = TextNodes[index].buttonindex.map((buttonindex) => (
+  // <Text>{buttonindex}</Text>
+  //));
