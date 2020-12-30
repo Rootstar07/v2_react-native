@@ -1,6 +1,5 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useRef } from "react";
-
 import {
   ScrollView,
   StyleSheet,
@@ -8,7 +7,8 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
-  Button,
+  Modal,
+  TouchableHighlight,
 } from "react-native";
 import data from "./nodesjson.json";
 
@@ -48,10 +48,9 @@ export default function App() {
   const [HP, setHP] = useState(10);
   const [Psy, setPsy] = useState(10);
   const [Bullet, setBullet] = useState(0);
-
+  const [modalVisible, setModalVisible] = useState(false);
   const scrollViewRef = useRef();
-
-  //var Node_ID = 0;
+  //const [modaltest, setModalTest] = useState("false");
 
   const StartGame = () => {
     //setIndex(TextNodes[index].buttonindex[0]); //수정필요 -> 버튼의 인덱스를 받아 수정
@@ -65,7 +64,9 @@ export default function App() {
         <TouchableOpacity
           style={styles.TouchableOpacityDesign}
           key={name.buttonID}
-          onPress={() => NeXtNode(name.nextID, name.buttonID, name.setUI)} //배열 안의 오브젝트라도 손쉽게 다룰수있게 되었다.
+          onPress={() =>
+            NeXtNode(name.nextID, name.buttonID, name.setUI, name.isFate)
+          } //배열 안의 오브젝트라도 손쉽게 다룰수있게 되었다.
         >
           <Text style={styles.buttonFont}>{name.text}</Text>
         </TouchableOpacity>
@@ -76,9 +77,11 @@ export default function App() {
 
   const onSetPage = (a) => {
     changedstory = changedstory + CrossRoad[a].text + spacing; // mission: 띄어쓰기 넣기
+
     setTopText(CrossRoad[a].title);
     setDownText(changedstory);
     scrollViewRef.current.scrollToEnd({ animated: true }); //스크롤 관리
+    //버튼생성
 
     SetButtonList2(
       CrossRoad[a].options.map((name) => (
@@ -86,13 +89,22 @@ export default function App() {
           style={styles.TouchableOpacityDesign}
           key={name.buttonID}
           onPress={() => {
-            NeXtNode(name.nextID, name.buttonID, name.setUI);
+            if (name.isFate == 1) {
+              setDice();
+            } else {
+              NeXtNode(name.nextID, name.buttonID, name.setUI, name.isFate);
+            }
           }}
         >
+          <Text style={styles.buttonFont}>{name.isFate}</Text>
           <Text style={styles.buttonFont}>{name.text}</Text>
         </TouchableOpacity>
       ))
     );
+  };
+
+  const setDice = () => {
+    setModalVisible(true);
   };
 
   const onSetUI = (hp, psy, bullet) => {
@@ -104,9 +116,9 @@ export default function App() {
     var nowBullet = setBullet(Bullet + changedBullet);
   };
 
-  const NeXtNode = (nextID, nowID, UIdata) => {
+  const NeXtNode = (nextID, nowID, UIdata, Fate) => {
     setPressedButtonID(nowID);
-    onSetPage(nextID);
+    onSetPage(nextID, Fate);
     onSetUI(UIdata.setHP, UIdata.setPsy, UIdata.setBullet);
   };
 
@@ -145,6 +157,43 @@ export default function App() {
         <View style={styles.textbox}>
           <ScrollView ref={scrollViewRef}>
             <Text style={styles.text}>{downtext}</Text>
+
+            <View style={styles.centeredView}>
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                  Alert.alert("Modal has been closed.");
+                }}
+              >
+                <View style={styles.centeredView}>
+                  <View style={styles.modalView}>
+                    <Text style={styles.modalText}>Hello World!</Text>
+                    <TouchableHighlight
+                      style={{
+                        ...styles.openButton,
+                        backgroundColor: "#2196F3",
+                      }}
+                      onPress={() => {
+                        setModalVisible(!modalVisible);
+                      }}
+                    >
+                      <Text style={styles.textStyle}>주사위 굴리기</Text>
+                    </TouchableHighlight>
+                  </View>
+                </View>
+              </Modal>
+              <TouchableHighlight
+                style={styles.openButton}
+                onPress={() => {
+                  setModalVisible(true);
+                }}
+              >
+                <Text style={styles.textStyle}>Show Modal</Text>
+              </TouchableHighlight>
+            </View>
+
             <Text>{taleSpacing}</Text>
           </ScrollView>
         </View>
@@ -241,9 +290,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
-  buttonbox: {},
-
   title: {
     fontWeight: "bold",
     fontSize: 30,
@@ -252,5 +298,41 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     color: "snow",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 10,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "snow", //모달 배경색
+    borderRadius: 20,
+    padding: 120,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  openButton: {
+    backgroundColor: "#F194FF", //모달 true 버튼
+    borderRadius: 10,
+    padding: 10,
+    elevation: 2,
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
   },
 });

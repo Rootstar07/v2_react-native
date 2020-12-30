@@ -1,30 +1,32 @@
 { "nodesjson": [
     {
       "title": "새벽",
-      "isContinue": true,
       "id": 0,
       "text":
         "당신은 알 수 없는 서늘한 감각에 눈을 뜹니다. 보이는 것은 희미한 나무 천장입니다. 문밖에 동생이 나간 흔적이 있습니다.",
       "options": [
         {
           "buttonID": 1,
-          "text": "동생을 따라간다.",
+          "text": "f동생을 따라간다.",
           "setState": { "blueGoo": true },
           "nextID": 1,
+          "isFate": 0,
           "setUI": {"setHP": -1, "setPsy": -2, "setBullet": 0}
         },
         {
           "buttonID": 2,
-          "text": "다시 잔다.",
+          "text": "f다시 잔다.",
           "setState": { "blueGoo": false },
           "nextID": 2,
+          "isFate": 0,
           "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
         },
         {
           "buttonID": 3,
-          "text": "상황을 지켜본다.",
+          "text": "t상황을 지켜본다.",
           "setState": { "blueGoo": false },
           "nextID": 1,
+          "isFate": 1,
           "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
           
         }
@@ -33,57 +35,61 @@
     },
     {
       "title": "두명의 사내",
-      "isContinue": true,
       "id": 1,
       "text":
         "밖에는 총을 든 두명의 사내가 어색한 표정으로 서 있습니다",
       "options": [
         {
           "buttonID": 1,
-          "text": "그들을 위협한다.",
+          "text": "f그들을 위협한다.",
           "setState": { "blueGoo": true },
           "nextID": 2,
+          "isFate": 0,
           "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
         },
         {
           "buttonID": 2,
-          "text": "그들을 말을 들어본다.",
+          "text": "f그들을 말을 들어본다.",
           "setState": { "blueGoo": false },
           "nextID": 0,
+          "isFate": 0,
           "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
         },
         {
           "buttonID": 3,
-          "text": "눈치를 보며 주변의 무기를 찾는다.",
+          "text": "t눈치를 보며 주변의 무기를 찾는다.",
           "setState": { "blueGoo": false },
           "nextID": 2,
+          "isFate": 1,
           "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
         }
       ]
     },
     {
       "title": "Cien años de soledad",
-      "isContinue": true,
       "id": 2,
       "text":
         "'살려주시오' 그들은 당신에게 말합니다.",
       "options": [
         {
-          "text": "그들에게 먹을 것을 내어 준다.",
+          "text": "t그들에게 먹을 것을 내어 준다.",
           "setState": { "blueGoo": true },
           "nextID": 0,
+          "isFate": 1,
           "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
         },
         {
-          "text": "그들을 내쫒는다.",
+          "text": "f그들을 내쫒는다.",
           "setState": { "blueGoo": false },
           "nextID": 0,
+          "isFate": 0,
           "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
         },
         {
-          "text": "말을 좀 더 들어본다.",
+          "text": "f말을 좀 더 들어본다.",
           "setState": { "blueGoo": false },
           "nextID": 0,
+          "isFate": 0,
           "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
         }
       ]
