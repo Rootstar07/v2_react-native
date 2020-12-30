@@ -46,15 +46,14 @@ export default function App() {
         </TouchableOpacity>
       ))
       //12.26 버튼이 문제가 아니라 SetPressedButtonID(여기)가 문제였다. 왜일까?
-      //목표: 클릭한 버튼 ID값 찾아내기! - 해결
     );
   };
 
   const onSetPage = (a) => {
-    scrollViewRef.current.scrollToEnd({ animated: true });
-    changedstory = changedstory + CrossRoad[a].text; //띄어쓰기 넣기
+    scrollViewRef.current.scrollToEnd({ animated: true }); //스크롤 관리
+    changedstory = changedstory + CrossRoad[a].text; // mission: 띄어쓰기 넣기
     setTopText(CrossRoad[a].title);
-    setDownText(changedstory + CrossRoad[a].text);
+    setDownText(changedstory);
 
     SetButtonList2(
       CrossRoad[a].options.map((name) => (
@@ -121,7 +120,6 @@ export default function App() {
         <View style={styles.textbox}>
           <ScrollView ref={scrollViewRef}>
             <Text style={styles.text}>{downtext}</Text>
-            <Text style={styles.text}>{storytext}</Text>
           </ScrollView>
         </View>
       </View>
