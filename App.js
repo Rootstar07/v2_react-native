@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useRef } from "react";
+
 import {
   ScrollView,
   StyleSheet,
@@ -7,6 +8,7 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
+  Button,
 } from "react-native";
 import data from "./nodesjson.json";
 
@@ -16,9 +18,29 @@ var changedPsy = 0;
 var changedBullet = 0;
 var changedstory = "";
 var spacing = `
-  
+
+
 
   `;
+var taleSpacing = `
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+`;
 
 export default function App() {
   const [toptext, setTopText] = useState("");
@@ -26,7 +48,6 @@ export default function App() {
   const [HP, setHP] = useState(10);
   const [Psy, setPsy] = useState(10);
   const [Bullet, setBullet] = useState(0);
-  const [storytext, setStoryText] = useState([]);
 
   const scrollViewRef = useRef();
 
@@ -54,10 +75,10 @@ export default function App() {
   };
 
   const onSetPage = (a) => {
-    scrollViewRef.current.scrollToEnd({ animated: true }); //스크롤 관리
     changedstory = changedstory + CrossRoad[a].text + spacing; // mission: 띄어쓰기 넣기
     setTopText(CrossRoad[a].title);
     setDownText(changedstory);
+    scrollViewRef.current.scrollToEnd({ animated: true }); //스크롤 관리
 
     SetButtonList2(
       CrossRoad[a].options.map((name) => (
@@ -124,6 +145,7 @@ export default function App() {
         <View style={styles.textbox}>
           <ScrollView ref={scrollViewRef}>
             <Text style={styles.text}>{downtext}</Text>
+            <Text>{taleSpacing}</Text>
           </ScrollView>
         </View>
       </View>
@@ -133,11 +155,11 @@ export default function App() {
     </SafeAreaView>
   );
 }
-
+// 아이보리색 : #efeeee
 const styles = StyleSheet.create({
   master: {
     flex: 1,
-    backgroundColor: "#efeeee",
+    backgroundColor: "#121212",
   },
   safeArea: {
     flex: 0.7,
@@ -149,10 +171,12 @@ const styles = StyleSheet.create({
   },
   uiText: {
     fontSize: 15,
+    color: "snow",
   },
   uiNum: {
     fontSize: 30,
     fontWeight: "bold",
+    color: "snow",
   },
   uiHPContainer: {
     flex: 1,
@@ -190,21 +214,22 @@ const styles = StyleSheet.create({
     marginHorizontal: 25,
   },
   BottomArea: {
-    flex: 2.5,
+    flex: 3,
   },
   TouchableOpacityDesign: {
     borderRadius: 10, //테투리 설정
-    //backgroundColor: "#282825", //버튼 색깔
-    margin: 1, //버튼 사이 간격
+    //backgroundColor: "#282825", #BB86F//버튼 색깔, 보라색
+    margin: 2, //버튼 사이 간격
     marginHorizontal: 15, //버튼 폭
-    paddingHorizontal: 20, //버튼 내부 수평
-    paddingVertical: 10, //버튼 내부 수직
-    borderWidth: 2,
+    paddingHorizontal: 30, //버튼 내부 수평
+    paddingVertical: 12, //버튼 내부 수직
+    borderWidth: 3,
     borderColor: "#282825",
+    backgroundColor: "#282825",
   },
   buttonFont: {
     fontSize: 17,
-    color: "black",
+    color: "snow",
   },
   startbutton: {
     alignItems: "center",
@@ -212,7 +237,7 @@ const styles = StyleSheet.create({
   },
   buttonFont2: {
     fontSize: 17,
-    color: "black",
+    color: "snow",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -222,8 +247,10 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: "bold",
     fontSize: 30,
+    color: "snow",
   },
   text: {
     fontSize: 20,
+    color: "snow",
   },
 });
