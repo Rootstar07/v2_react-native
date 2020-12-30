@@ -15,6 +15,10 @@ var changedHP = 0;
 var changedPsy = 0;
 var changedBullet = 0;
 var changedstory = "";
+var spacing = `
+  
+
+  `;
 
 export default function App() {
   const [toptext, setTopText] = useState("");
@@ -51,7 +55,7 @@ export default function App() {
 
   const onSetPage = (a) => {
     scrollViewRef.current.scrollToEnd({ animated: true }); //스크롤 관리
-    changedstory = changedstory + CrossRoad[a].text; // mission: 띄어쓰기 넣기
+    changedstory = changedstory + CrossRoad[a].text + spacing; // mission: 띄어쓰기 넣기
     setTopText(CrossRoad[a].title);
     setDownText(changedstory);
 
