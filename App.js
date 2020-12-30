@@ -189,7 +189,7 @@ export default function App() {
                     backgroundColor: "black",
                     position: "absolute",
                     justifyContent: "center",
-                    opacity: 0.77,
+                    opacity: 0.7,
                     borderRadius: 20,
                   }}
                 ></View>
