@@ -1,11 +1,10 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import {
   ScrollView,
   StyleSheet,
   Text,
   View,
-  Button,
   SafeAreaView,
   TouchableOpacity,
 } from "react-native";
@@ -15,30 +14,27 @@ var CrossRoad = data.nodesjson;
 var changedHP = 0;
 var changedPsy = 0;
 var changedBullet = 0;
+var changedstory = "";
 
 export default function App() {
-  const [node, setNode] = useState(0);
   const [toptext, setTopText] = useState("");
-  const [downtext, setDownText] = useState("");
-  const [index, setIndex] = useState(0);
   const [PressedButtonID, setPressedButtonID] = useState(0);
-  const [nextButtonID, setNextButtonID] = useState(0);
   const [HP, setHP] = useState(10);
   const [Psy, setPsy] = useState(10);
   const [Bullet, setBullet] = useState(0);
+  const [storytext, setStoryText] = useState([]);
+
+  const scrollViewRef = useRef();
 
   //var Node_ID = 0;
 
-  const onSetPage = () => {
+  const StartGame = () => {
     //setIndex(TextNodes[index].buttonindex[0]); //수정필요 -> 버튼의 인덱스를 받아 수정
     // const Node_ID = textNode.options[0].nextID; //Node_ID를 json의 next로 변경 -> 숫자로 하려면 Number(obj)
-
-    setNode(index); //현재는 초기값 : 0
-    setTopText(CrossRoad[index].title);
-    setDownText(CrossRoad[index].text);
-
+    setTopText(CrossRoad[0].title);
+    setDownText(CrossRoad[0].text);
     SetButtonList2(
-      CrossRoad[index].options.map((
+      CrossRoad[0].options.map((
         name //name이 TextNodes[0].options가 되는 기적!
       ) => (
         <TouchableOpacity
@@ -54,17 +50,20 @@ export default function App() {
     );
   };
 
-  const onSetPage2 = (a) => {
-    setNode(a); //현재는 초기값 : 0
+  const onSetPage = (a) => {
+    scrollViewRef.current.scrollToEnd({ animated: true });
+    changedstory = changedstory + CrossRoad[a].text; //띄어쓰기 넣기
     setTopText(CrossRoad[a].title);
-    setDownText(CrossRoad[a].text);
+    setDownText(changedstory + CrossRoad[a].text);
 
     SetButtonList2(
       CrossRoad[a].options.map((name) => (
         <TouchableOpacity
           style={styles.TouchableOpacityDesign}
           key={name.buttonID}
-          onPress={() => NeXtNode(name.nextID, name.buttonID, name.setUI)}
+          onPress={() => {
+            NeXtNode(name.nextID, name.buttonID, name.setUI);
+          }}
         >
           <Text style={styles.buttonFont}>{name.text}</Text>
         </TouchableOpacity>
@@ -83,19 +82,19 @@ export default function App() {
 
   const NeXtNode = (nextID, nowID, UIdata) => {
     setPressedButtonID(nowID);
-    setNextButtonID(nextID);
-    setIndex(nextID);
-    onSetPage2(nextID);
+    onSetPage(nextID);
     onSetUI(UIdata.setHP, UIdata.setPsy, UIdata.setBullet);
   };
 
   const [buttonList2, SetButtonList2] = useState([
-    <TouchableOpacity onPress={onSetPage}>
+    <TouchableOpacity onPress={StartGame}>
       <View style={styles.startbutton}>
         <Text style={styles.buttonFont2}>시작하기</Text>
       </View>
     </TouchableOpacity>,
   ]);
+
+  const [downtext, setDownText] = useState([""]);
 
   return (
     <SafeAreaView style={styles.master}>
@@ -120,8 +119,9 @@ export default function App() {
           <Text style={styles.title}>{toptext}</Text>
         </View>
         <View style={styles.textbox}>
-          <ScrollView>
+          <ScrollView ref={scrollViewRef}>
             <Text style={styles.text}>{downtext}</Text>
+            <Text style={styles.text}>{storytext}</Text>
           </ScrollView>
         </View>
       </View>
