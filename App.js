@@ -77,7 +77,6 @@ export default function App() {
 
   const onSetPage = (a) => {
     changedstory = changedstory + CrossRoad[a].text + spacing; // mission: 띄어쓰기 넣기
-
     setTopText(CrossRoad[a].title);
     setDownText(changedstory);
     scrollViewRef.current.scrollToEnd({ animated: true }); //스크롤 관리
@@ -86,25 +85,39 @@ export default function App() {
     SetButtonList2(
       CrossRoad[a].options.map((name) => (
         <TouchableOpacity
-          style={styles.TouchableOpacityDesign}
+          style={[
+            name.isFate == 1
+              ? styles.TouchableOpacityDesign
+              : styles.TouchableOpacityDesign2,
+          ]}
           key={name.buttonID}
           onPress={() => {
             if (name.isFate == 1) {
-              setDice();
+              setDice(name.nextID, name.buttonID, name.setUI, name.isFate);
             } else {
               NeXtNode(name.nextID, name.buttonID, name.setUI, name.isFate);
             }
           }}
         >
-          <Text style={styles.buttonFont}>{name.isFate}</Text>
-          <Text style={styles.buttonFont}>{name.text}</Text>
+          <Text
+            style={[name.isFate == 1 ? styles.buttonFont : styles.buttonFont2]}
+          >
+            {name.text}
+          </Text>
         </TouchableOpacity>
       ))
     );
   };
 
-  const setDice = () => {
+  const setDice = (a, b, c, d) => {
+    //모달창 열때
     setModalVisible(true);
+    NeXtNode(a, b, c, d); //창을 열고 다음 노드로 넘김 -> 닫는 버튼을 눌러야 가게 하고싶다.
+  };
+
+  const setDice2 = () => {
+    //모달 닫는 버튼 누를때
+    setModalVisible(!modalVisible);
   };
 
   const onSetUI = (hp, psy, bullet) => {
@@ -116,9 +129,9 @@ export default function App() {
     var nowBullet = setBullet(Bullet + changedBullet);
   };
 
-  const NeXtNode = (nextID, nowID, UIdata, Fate) => {
+  const NeXtNode = (nextID, nowID, UIdata) => {
     setPressedButtonID(nowID);
-    onSetPage(nextID, Fate);
+    onSetPage(nextID);
     onSetUI(UIdata.setHP, UIdata.setPsy, UIdata.setBullet);
   };
 
@@ -161,39 +174,43 @@ export default function App() {
             <View style={styles.centeredView}>
               <Modal
                 animationType="slide"
+                backdropColor="snow"
+                backdropOpacity={1}
                 transparent={true}
                 visible={modalVisible}
                 onRequestClose={() => {
                   Alert.alert("Modal has been closed.");
                 }}
               >
+                <View
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: "black",
+                    position: "absolute",
+                    justifyContent: "center",
+                    opacity: 0.7,
+                    borderRadius: 20,
+                  }}
+                ></View>
                 <View style={styles.centeredView}>
                   <View style={styles.modalView}>
-                    <Text style={styles.modalText}>Hello World!</Text>
+                    <Text style={styles.modalText}>나온 숫자는</Text>
                     <TouchableHighlight
                       style={{
                         ...styles.openButton,
                         backgroundColor: "#2196F3",
                       }}
                       onPress={() => {
-                        setModalVisible(!modalVisible);
+                        setDice2();
                       }}
                     >
-                      <Text style={styles.textStyle}>주사위 굴리기</Text>
+                      <Text style={styles.textStyle}>계속</Text>
                     </TouchableHighlight>
                   </View>
                 </View>
               </Modal>
-              <TouchableHighlight
-                style={styles.openButton}
-                onPress={() => {
-                  setModalVisible(true);
-                }}
-              >
-                <Text style={styles.textStyle}>Show Modal</Text>
-              </TouchableHighlight>
             </View>
-
             <Text>{taleSpacing}</Text>
           </ScrollView>
         </View>
@@ -273,12 +290,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30, //버튼 내부 수평
     paddingVertical: 12, //버튼 내부 수직
     borderWidth: 3,
+    borderColor: "#F194FF",
+    backgroundColor: "#F194FF",
+  },
+  TouchableOpacityDesign2: {
+    borderRadius: 10, //테투리 설정
+    //backgroundColor: "#282825", #BB86F//버튼 색깔, 보라색
+    margin: 2, //버튼 사이 간격
+    marginHorizontal: 15, //버튼 폭
+    paddingHorizontal: 30, //버튼 내부 수평
+    paddingVertical: 12, //버튼 내부 수직
+    borderWidth: 3,
     borderColor: "#282825",
     backgroundColor: "#282825",
   },
   buttonFont: {
     fontSize: 17,
-    color: "snow",
+    color: "black",
   },
   startbutton: {
     alignItems: "center",
@@ -306,7 +334,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   modalView: {
-    margin: 20,
+    margin: 0,
     backgroundColor: "snow", //모달 배경색
     borderRadius: 20,
     padding: 120,
@@ -319,12 +347,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-  },
-  openButton: {
-    backgroundColor: "#F194FF", //모달 true 버튼
-    borderRadius: 10,
-    padding: 10,
-    elevation: 2,
   },
   textStyle: {
     color: "white",

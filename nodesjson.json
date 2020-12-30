@@ -7,7 +7,7 @@
       "options": [
         {
           "buttonID": 1,
-          "text": "f동생을 따라간다.",
+          "text": "동생을 따라간다.",
           "setState": { "blueGoo": true },
           "nextID": 1,
           "isFate": 0,
@@ -15,7 +15,7 @@
         },
         {
           "buttonID": 2,
-          "text": "f다시 잔다.",
+          "text": "다시 잔다.",
           "setState": { "blueGoo": false },
           "nextID": 2,
           "isFate": 0,
@@ -23,7 +23,7 @@
         },
         {
           "buttonID": 3,
-          "text": "t상황을 지켜본다.",
+          "text": "상황을 지켜본다.",
           "setState": { "blueGoo": false },
           "nextID": 1,
           "isFate": 1,
@@ -41,7 +41,7 @@
       "options": [
         {
           "buttonID": 1,
-          "text": "f그들을 위협한다.",
+          "text": "그들을 위협한다.",
           "setState": { "blueGoo": true },
           "nextID": 2,
           "isFate": 0,
@@ -49,7 +49,7 @@
         },
         {
           "buttonID": 2,
-          "text": "f그들을 말을 들어본다.",
+          "text": "그들을 말을 들어본다.",
           "setState": { "blueGoo": false },
           "nextID": 0,
           "isFate": 0,
@@ -57,7 +57,7 @@
         },
         {
           "buttonID": 3,
-          "text": "t눈치를 보며 주변의 무기를 찾는다.",
+          "text": "눈치를 보며 주변의 무기를 찾는다.",
           "setState": { "blueGoo": false },
           "nextID": 2,
           "isFate": 1,
@@ -72,21 +72,21 @@
         "'살려주시오' 그들은 당신에게 말합니다.",
       "options": [
         {
-          "text": "t그들에게 먹을 것을 내어 준다.",
+          "text": "그들에게 먹을 것을 내어 준다.",
           "setState": { "blueGoo": true },
           "nextID": 0,
           "isFate": 1,
           "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
         },
         {
-          "text": "f그들을 내쫒는다.",
+          "text": "그들을 내쫒는다.",
           "setState": { "blueGoo": false },
           "nextID": 0,
           "isFate": 0,
           "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
         },
         {
-          "text": "f말을 좀 더 들어본다.",
+          "text": "말을 좀 더 들어본다.",
           "setState": { "blueGoo": false },
           "nextID": 0,
           "isFate": 0,
