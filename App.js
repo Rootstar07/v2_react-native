@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   buttonbox: {
-    flex: 1.2,
+    flex: 1,
   },
 
   title: {
