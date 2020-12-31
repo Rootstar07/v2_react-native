@@ -17,3 +17,59 @@
   // const buttonindexList = TextNodes[index].buttonindex.map((buttonindex) => (
   // <Text>{buttonindex}</Text>
   //));
+
+
+//모달
+  <View style={styles.centeredView}>
+              <Modal
+                animationType="slide"
+                backdropColor="snow"
+                backdropOpacity={1}
+                transparent={true}
+                visible={modalVisible}
+              >
+                <View
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: "black",
+                    position: "absolute",
+                    justifyContent: "center",
+                    opacity: 0.77,
+                    borderRadius: 20,
+                  }}
+                ></View>
+                <View style={styles.centeredView}>
+                  <View style={styles.modalView}>
+                    <Text style={styles.modalText}>{getRandomInt(1, 7)}</Text>
+
+                    <TouchableHighlight
+                      style={{
+                        ...styles.openButton,
+                        backgroundColor: "#2196F3",
+                      }}
+                      onPress={() => {
+                        closeModal();
+                      }}
+                    >
+                      <Text style={styles.textStyle}>계속</Text>
+                    </TouchableHighlight>
+                  </View>
+                </View>
+              </Modal>
+            </View>
+
+
+
+              const openModal = (a, b, c, d) => {
+    //모달창 열때
+    setModalVisible(true); //모달 true
+    NeXtNode(a, b, c, d);
+
+    //모달창을 닫을때 화면을 전환하기 위해 미리 인수를 전달함
+  };
+
+  const closeModal = () => {
+    //모달 닫는 버튼 누를때
+    setModalVisible(!modalVisible);
+  };

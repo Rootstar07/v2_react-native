@@ -7,8 +7,6 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
-  Modal,
-  TouchableHighlight,
 } from "react-native";
 import data from "./nodesjson.json";
 import Switch from "expo-dark-mode-switch";
@@ -42,10 +40,7 @@ var taleSpacing = `
 
 
 `;
-let a1 = 0,
-  b1 = 0,
-  c1 = 0,
-  d1 = 0;
+var i = 0;
 
 export default function App() {
   const [toptext, setTopText] = useState("");
@@ -53,7 +48,6 @@ export default function App() {
   const [HP, setHP] = useState(10);
   const [Psy, setPsy] = useState(10);
   const [Bullet, setBullet] = useState(0);
-  const [modalVisible, setModalVisible] = useState(false);
 
   const [value, setValue] = useState(true); //다크모드버튼
 
@@ -100,14 +94,20 @@ export default function App() {
       CrossRoad[a].options.map((name) => (
         <TouchableOpacity
           style={[
-            name.isFate == 1
+            name.isFate == true
               ? styles.TouchableOpacityDesign
               : styles.TouchableOpacityDesign2,
           ]}
           key={name.buttonID}
           onPress={() => {
-            if (name.isFate == 1) {
-              openModal(name.nextID, name.buttonID, name.setUI, name.isFate);
+            if (name.isFate == true) {
+              NeXtNode(
+                name.nextID,
+                name.buttonID,
+                name.setUI,
+                name.isFate,
+                name.leaveToFate
+              );
             } else {
               NeXtNode(name.nextID, name.buttonID, name.setUI, name.isFate);
             }
@@ -123,19 +123,6 @@ export default function App() {
     );
   };
 
-  const openModal = (a, b, c, d) => {
-    //모달창 열때
-    setModalVisible(true); //모달 true
-    NeXtNode(a, b, c, d);
-
-    //모달창을 닫을때 화면을 전환하기 위해 미리 인수를 전달함
-  };
-
-  const closeModal = () => {
-    //모달 닫는 버튼 누를때
-    setModalVisible(!modalVisible);
-  };
-
   const onSetUI = (hp, psy, bullet) => {
     changedHP = changedHP + hp;
     changedPsy = changedPsy + psy;
@@ -145,10 +132,23 @@ export default function App() {
     var nowBullet = setBullet(Bullet + changedBullet);
   };
 
-  const NeXtNode = (nextID, nowID, UIdata) => {
-    setPressedButtonID(nowID);
-    onSetPage(nextID);
-    onSetUI(UIdata.setHP, UIdata.setPsy, UIdata.setBullet);
+  const NeXtNode = (nextID, nowID, UIdata, isfate, leaveToFate) => {
+    if (isfate == 0) {
+      setPressedButtonID(nowID);
+      onSetPage(nextID);
+      onSetUI(UIdata.setHP, UIdata.setPsy + 1, UIdata.setBullet);
+    } else if (isfate == 1) {
+      i = getRandomInt(1, 7);
+      setPressedButtonID(nowID);
+      onSetPage(nextID);
+      if (leaveToFate == 1) {
+        onSetUI(i, 0, 0);
+      } else if (leaveToFate == 2) {
+        onSetUI(0, i, 0);
+      } else if (leaveToFate == 3) {
+        onSetUI(0, 0, i);
+      }
+    }
   };
 
   const [buttonList2, SetButtonList2] = useState([
@@ -189,45 +189,7 @@ export default function App() {
         <View style={styles.textbox}>
           <ScrollView ref={scrollViewRef}>
             <Text style={styles.text}>{downtext}</Text>
-
-            <View style={styles.centeredView}>
-              <Modal
-                animationType="slide"
-                backdropColor="snow"
-                backdropOpacity={1}
-                transparent={true}
-                visible={modalVisible}
-              >
-                <View
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    backgroundColor: "black",
-                    position: "absolute",
-                    justifyContent: "center",
-                    opacity: 0.77,
-                    borderRadius: 20,
-                  }}
-                ></View>
-                <View style={styles.centeredView}>
-                  <View style={styles.modalView}>
-                    <Text style={styles.modalText}>{getRandomInt(1, 7)}</Text>
-
-                    <TouchableHighlight
-                      style={{
-                        ...styles.openButton,
-                        backgroundColor: "#2196F3",
-                      }}
-                      onPress={() => {
-                        closeModal();
-                      }}
-                    >
-                      <Text style={styles.textStyle}>계속</Text>
-                    </TouchableHighlight>
-                  </View>
-                </View>
-              </Modal>
-            </View>
+            <Text>{i}</Text>
             <Text>{taleSpacing}</Text>
           </ScrollView>
         </View>
