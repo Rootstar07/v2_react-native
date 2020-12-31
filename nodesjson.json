@@ -10,14 +10,14 @@
           "text": "동생을 따라간다.",
           "setState": { "blueGoo": true },
           "nextID": 1,
-          "isFate": 0,
-          "setUI": {"setHP": -1, "setPsy": -2, "setBullet": 0}
+          "isFate": 1,
+          "setUI": {"setHP": -1, "setPsy": 0, "setBullet": 0}
         },
         {
           "buttonID": 2,
           "text": "다시 잔다.",
           "setState": { "blueGoo": false },
-          "nextID": 2,
+          "nextID": 1,
           "isFate": 0,
           "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
         },
@@ -27,7 +27,7 @@
           "setState": { "blueGoo": false },
           "nextID": 1,
           "isFate": 1,
-          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
+          "setUI": {"setHP": 0, "setPsy": -1, "setBullet": 0}
           
         }
         

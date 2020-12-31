@@ -42,7 +42,7 @@ var taleSpacing = `
 
 
 `;
-var a1 = 0,
+let a1 = 0,
   b1 = 0,
   c1 = 0,
   d1 = 0;
@@ -126,16 +126,14 @@ export default function App() {
   const openModal = (a, b, c, d) => {
     //모달창 열때
     setModalVisible(true); //모달 true
-    a1 = a;
-    b1 = b;
-    c1 = c;
-    d1 = d; //모달창을 닫을때 화면을 전환하기 위해 미리 인수를 전달함
+    NeXtNode(a, b, c, d);
+
+    //모달창을 닫을때 화면을 전환하기 위해 미리 인수를 전달함
   };
 
   const closeModal = () => {
     //모달 닫는 버튼 누를때
     setModalVisible(!modalVisible);
-    NeXtNode(a1, b1, c1, d1);
   };
 
   const onSetUI = (hp, psy, bullet) => {
@@ -199,9 +197,6 @@ export default function App() {
                 backdropOpacity={1}
                 transparent={true}
                 visible={modalVisible}
-                onRequestClose={() => {
-                  Alert.alert("Modal has been closed.");
-                }}
               >
                 <View
                   style={{
