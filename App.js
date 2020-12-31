@@ -42,6 +42,10 @@ var taleSpacing = `
 
 
 `;
+var a1 = 0,
+  b1 = 0,
+  c1 = 0,
+  d1 = 0;
 
 export default function App() {
   const [toptext, setTopText] = useState("");
@@ -51,7 +55,7 @@ export default function App() {
   const [Bullet, setBullet] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const [value, setValue] = React.useState(true); //다크모드버튼
+  const [value, setValue] = useState(true); //다크모드버튼
 
   const scrollViewRef = useRef();
   //const [modaltest, setModalTest] = useState("false");
@@ -103,7 +107,7 @@ export default function App() {
           key={name.buttonID}
           onPress={() => {
             if (name.isFate == 1) {
-              setDice(name.nextID, name.buttonID, name.setUI, name.isFate);
+              openModal(name.nextID, name.buttonID, name.setUI, name.isFate);
             } else {
               NeXtNode(name.nextID, name.buttonID, name.setUI, name.isFate);
             }
@@ -119,15 +123,19 @@ export default function App() {
     );
   };
 
-  const setDice = (a, b, c, d) => {
+  const openModal = (a, b, c, d) => {
     //모달창 열때
     setModalVisible(true); //모달 true
-    NeXtNode(a, b, c, d); //창을 열고 다음 노드로 넘김 -> 닫는 버튼을 눌러야 가게 하고싶다.
+    a1 = a;
+    b1 = b;
+    c1 = c;
+    d1 = d; //모달창을 닫을때 화면을 전환하기 위해 미리 인수를 전달함
   };
 
-  const setDice2 = () => {
+  const closeModal = () => {
     //모달 닫는 버튼 누를때
     setModalVisible(!modalVisible);
+    NeXtNode(a1, b1, c1, d1);
   };
 
   const onSetUI = (hp, psy, bullet) => {
@@ -216,7 +224,7 @@ export default function App() {
                         backgroundColor: "#2196F3",
                       }}
                       onPress={() => {
-                        setDice2();
+                        closeModal();
                       }}
                     >
                       <Text style={styles.textStyle}>계속</Text>
@@ -296,9 +304,9 @@ const styles = StyleSheet.create({
   BottomArea: {
     flex: 3,
   },
+  //일반버튼
   TouchableOpacityDesign: {
     borderRadius: 10, //테투리 설정
-    //backgroundColor: "#282825", #BB86F//버튼 색깔, 보라색
     margin: 2, //버튼 사이 간격
     marginHorizontal: 15, //버튼 폭
     paddingHorizontal: 30, //버튼 내부 수평
@@ -307,9 +315,9 @@ const styles = StyleSheet.create({
     borderColor: "#585CDE",
     backgroundColor: "#585CDE",
   },
+  //주사위 버튼
   TouchableOpacityDesign2: {
     borderRadius: 10, //테투리 설정
-    //backgroundColor: "#282825", #BB86F//버튼 색깔, 보라색
     margin: 2, //버튼 사이 간격
     marginHorizontal: 15, //버튼 폭
     paddingHorizontal: 30, //버튼 내부 수평
