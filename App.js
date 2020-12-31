@@ -11,6 +11,7 @@ import {
   TouchableHighlight,
 } from "react-native";
 import data from "./nodesjson.json";
+import Switch from "expo-dark-mode-switch";
 
 var CrossRoad = data.nodesjson;
 var changedHP = 0;
@@ -49,6 +50,9 @@ export default function App() {
   const [Psy, setPsy] = useState(10);
   const [Bullet, setBullet] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
+
+  const [value, setValue] = React.useState(true); //다크모드버튼
+
   const scrollViewRef = useRef();
   //const [modaltest, setModalTest] = useState("false");
 
@@ -74,6 +78,12 @@ export default function App() {
       //12.26 버튼이 문제가 아니라 SetPressedButtonID(여기)가 문제였다. 왜일까?
     );
   };
+
+  function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min; //최댓값은 제외, 최솟값은 포함
+  }
 
   const onSetPage = (a) => {
     changedstory = changedstory + CrossRoad[a].text + spacing; // mission: 띄어쓰기 넣기
@@ -111,7 +121,7 @@ export default function App() {
 
   const setDice = (a, b, c, d) => {
     //모달창 열때
-    setModalVisible(true);
+    setModalVisible(true); //모달 true
     NeXtNode(a, b, c, d); //창을 열고 다음 노드로 넘김 -> 닫는 버튼을 눌러야 가게 하고싶다.
   };
 
@@ -149,9 +159,12 @@ export default function App() {
     <SafeAreaView style={styles.master}>
       <View style={styles.safeArea}></View>
       <View style={styles.TopArea}>
-        <View style={styles.uiHamburger}></View>
+        <View style={styles.uiHamburger}>
+          <Switch value={value} onChange={(value) => setValue(value)} />
+        </View>
         <View style={styles.uiHPContainer}>
           <Text style={styles.uiText}>체력</Text>
+
           <Text style={styles.uiNum}>{HP}</Text>
         </View>
         <View style={styles.uiPsyContainer}>
@@ -195,7 +208,8 @@ export default function App() {
                 ></View>
                 <View style={styles.centeredView}>
                   <View style={styles.modalView}>
-                    <Text style={styles.modalText}>나온 숫자는</Text>
+                    <Text style={styles.modalText}>{getRandomInt(1, 7)}</Text>
+
                     <TouchableHighlight
                       style={{
                         ...styles.openButton,
@@ -290,8 +304,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30, //버튼 내부 수평
     paddingVertical: 12, //버튼 내부 수직
     borderWidth: 3,
-    borderColor: "#F194FF",
-    backgroundColor: "#F194FF",
+    borderColor: "#585CDE",
+    backgroundColor: "#585CDE",
   },
   TouchableOpacityDesign2: {
     borderRadius: 10, //테투리 설정
@@ -306,7 +320,7 @@ const styles = StyleSheet.create({
   },
   buttonFont: {
     fontSize: 17,
-    color: "black",
+    color: "snow",
   },
   startbutton: {
     alignItems: "center",
@@ -356,5 +370,7 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center",
+    fontSize: 70,
+    fontWeight: "bold",
   },
 });
