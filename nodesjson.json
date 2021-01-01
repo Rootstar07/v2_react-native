@@ -7,25 +7,25 @@
       "options": [
         {
           "buttonID": 1,
-          "text": "동생을 따라간다.",
+          "text": "동생을 찾는다.",
           "nextID": 1,
-          "isFate": 1,
-          "leaveToFate" : 1,
-          "setUI": {"setHP": -1, "setPsy": 0, "setBullet": 0}
+          "isFate": true,
+          "range":[-2, 0],
+          "leaveToFate" : 1
         },
         {
           "buttonID": 2,
           "text": "다시 잔다.",
           "nextID": 1,
-          "isFate": 0,
+          "isFate": false,
           "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
         },
         {
           "buttonID": 3,
           "text": "상황을 지켜본다.",
           "nextID": 1,
-          "isFate": 1,
-          "setUI": {"setHP": 0, "setPsy": -1, "setBullet": 0}
+          "isFate": false,
+          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
           
         }
         
@@ -41,21 +41,21 @@
           "buttonID": 1,
           "text": "그들을 위협한다.",
           "nextID": 2,
-          "isFate": 0,
+          "isFate": false,
           "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
         },
         {
           "buttonID": 2,
           "text": "그들을 말을 들어본다.",
           "nextID": 0,
-          "isFate": 0,
+          "isFate": false,
           "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
         },
         {
           "buttonID": 3,
           "text": "눈치를 보며 주변의 무기를 찾는다.",
           "nextID": 2,
-          "isFate": 1,
+          "isFate": false,
           "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
         }
       ]
@@ -69,20 +69,22 @@
         {
           "text": "그들에게 먹을 것을 내어 준다.",
           "nextID": 0,
-          "isFate": 1,
+          "isFate": false,
           "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
         },
         {
           "text": "그들을 내쫒는다.",
           "nextID": 0,
-          "isFate": 0,
-          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
+          "isFate": true,
+          "range":[-2, 0],
+          "leaveToFate" : 2
         },
         {
           "text": "말을 좀 더 들어본다.",
           "nextID": 0,
-          "isFate": 0,
-          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
+          "isFate": true,
+          "range":[0, 3],
+          "leaveToFate" : 3
         }
       ]
     }

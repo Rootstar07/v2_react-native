@@ -49,10 +49,10 @@ export default function App() {
   const [Psy, setPsy] = useState(10);
   const [Bullet, setBullet] = useState(0);
 
-  const [value, setValue] = useState(true); //다크모드버튼
+  const [value, setValue] = React.useState(true);
+  const [test, setTest] = useState(0);
 
   const scrollViewRef = useRef();
-  //const [modaltest, setModalTest] = useState("false");
 
   const StartGame = () => {
     //setIndex(TextNodes[index].buttonindex[0]); //수정필요 -> 버튼의 인덱스를 받아 수정
@@ -101,6 +101,7 @@ export default function App() {
           key={name.buttonID}
           onPress={() => {
             if (name.isFate == true) {
+              i = getRandomInt(name.range[0], name.range[1]);
               NeXtNode(
                 name.nextID,
                 name.buttonID,
@@ -136,9 +137,8 @@ export default function App() {
     if (isfate == 0) {
       setPressedButtonID(nowID);
       onSetPage(nextID);
-      onSetUI(UIdata.setHP, UIdata.setPsy + 1, UIdata.setBullet);
+      onSetUI(UIdata.setHP, UIdata.setPsy, UIdata.setBullet);
     } else if (isfate == 1) {
-      i = getRandomInt(1, 7);
       setPressedButtonID(nowID);
       onSetPage(nextID);
       if (leaveToFate == 1) {
@@ -161,16 +161,24 @@ export default function App() {
 
   const [downtext, setDownText] = useState([""]);
 
+  const setDayNight = (value) => {
+    setValue(value);
+    if (value == true) {
+      setTest(1);
+    } else {
+      setTest(0);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.master}>
       <View style={styles.safeArea}></View>
       <View style={styles.TopArea}>
         <View style={styles.uiHamburger}>
-          <Switch value={value} onChange={(value) => setValue(value)} />
+          <Switch value={value} onChange={(value) => setDayNight(value)} />
         </View>
         <View style={styles.uiHPContainer}>
           <Text style={styles.uiText}>체력</Text>
-
           <Text style={styles.uiNum}>{HP}</Text>
         </View>
         <View style={styles.uiPsyContainer}>
@@ -190,6 +198,7 @@ export default function App() {
           <ScrollView ref={scrollViewRef}>
             <Text style={styles.text}>{downtext}</Text>
             <Text>{i}</Text>
+            <Text>{test}</Text>
             <Text>{taleSpacing}</Text>
           </ScrollView>
         </View>
