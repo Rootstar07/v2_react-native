@@ -41,6 +41,7 @@ var taleSpacing = `
 
 `;
 var i = 0;
+var feedback = "";
 
 export default function App() {
   const [toptext, setTopText] = useState("");
@@ -51,6 +52,9 @@ export default function App() {
 
   const [value, setValue] = React.useState(true);
   const [test, setTest] = useState(0);
+  //다크모드관리
+  const [daynightMaster, setDayNightMaster] = useState("#121212");
+  const [daynighttext, setDayNightText] = useState("#efeeee");
 
   const scrollViewRef = useRef();
 
@@ -83,8 +87,15 @@ export default function App() {
     return Math.floor(Math.random() * (max - min)) + min; //최댓값은 제외, 최솟값은 포함
   }
 
-  const onSetPage = (a) => {
-    changedstory = changedstory + CrossRoad[a].text + spacing; // mission: 띄어쓰기 넣기
+  const onSetPage = (a, isfate) => {
+    if (isfate == 1) {
+      feedback = `
+      
+      당신은 2의 피해를 입었습니다.`;
+    } else if (isfate == 0) {
+      feedback = "";
+    }
+    changedstory = changedstory + CrossRoad[a].text + feedback + spacing; // mission: 띄어쓰기 넣기
     setTopText(CrossRoad[a].title);
     setDownText(changedstory);
     scrollViewRef.current.scrollToEnd({ animated: true }); //스크롤 관리
@@ -136,11 +147,11 @@ export default function App() {
   const NeXtNode = (nextID, nowID, UIdata, isfate, leaveToFate) => {
     if (isfate == 0) {
       setPressedButtonID(nowID);
-      onSetPage(nextID);
+      onSetPage(nextID, isfate);
       onSetUI(UIdata.setHP, UIdata.setPsy, UIdata.setBullet);
     } else if (isfate == 1) {
       setPressedButtonID(nowID);
-      onSetPage(nextID);
+      onSetPage(nextID, isfate);
       if (leaveToFate == 1) {
         onSetUI(i, 0, 0);
       } else if (leaveToFate == 2) {
@@ -161,44 +172,110 @@ export default function App() {
 
   const [downtext, setDownText] = useState([""]);
 
-  const setDayNight = (value) => {
+  const adminDayNight = (value) => {
     setValue(value);
     if (value == true) {
+      //darkmode 켬
       setTest(1);
+      setDayNightMaster("#121212");
+      setDayNightText("#efeeee");
     } else {
+      //daymode 켬
       setTest(0);
+      setDayNightMaster("#efeeee");
+      setDayNightText("#121212");
     }
   };
 
   return (
-    <SafeAreaView style={styles.master}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: daynightMaster }}>
       <View style={styles.safeArea}></View>
       <View style={styles.TopArea}>
-        <View style={styles.uiHamburger}>
-          <Switch value={value} onChange={(value) => setDayNight(value)} />
+        <View style={styles.uiContainer}>
+          <Switch value={value} onChange={(value) => adminDayNight(value)} />
         </View>
-        <View style={styles.uiHPContainer}>
-          <Text style={styles.uiText}>체력</Text>
-          <Text style={styles.uiNum}>{HP}</Text>
+        <View style={styles.uiContainer}>
+          <Text
+            style={{
+              fontSize: 15,
+              color: daynighttext,
+            }}
+          >
+            체력
+          </Text>
+          <Text
+            style={{
+              fontSize: 30,
+              fontWeight: "bold",
+              color: daynighttext,
+            }}
+          >
+            {HP}
+          </Text>
         </View>
-        <View style={styles.uiPsyContainer}>
-          <Text style={styles.uiText}>정신</Text>
-          <Text style={styles.uiNum}>{Psy}</Text>
+        <View style={styles.uiContainer}>
+          <Text
+            style={{
+              fontSize: 15,
+              color: daynighttext,
+            }}
+          >
+            정신
+          </Text>
+          <Text
+            style={{
+              fontSize: 30,
+              fontWeight: "bold",
+              color: daynighttext,
+            }}
+          >
+            {Psy}
+          </Text>
         </View>
-        <View style={styles.uiBulletContainer}>
-          <Text style={styles.uiText}>총알</Text>
-          <Text style={styles.uiNum}>{Bullet}</Text>
+        <View style={styles.uiContainer}>
+          <Text
+            style={{
+              fontSize: 15,
+              color: daynighttext,
+            }}
+          >
+            총알
+          </Text>
+          <Text
+            style={{
+              fontSize: 30,
+              fontWeight: "bold",
+              color: daynighttext,
+            }}
+          >
+            {Bullet}
+          </Text>
         </View>
       </View>
       <View style={styles.MiddleArea}>
         <View style={styles.titlebox}>
-          <Text style={styles.title}>{toptext}</Text>
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontSize: 30,
+              color: daynighttext,
+            }}
+          >
+            {toptext}
+          </Text>
         </View>
         <View style={styles.textbox}>
           <ScrollView ref={scrollViewRef}>
-            <Text style={styles.text}>{downtext}</Text>
-            <Text>{i}</Text>
-            <Text>{test}</Text>
+            <Text
+              style={{
+                fontSize: 20,
+                color: daynighttext,
+              }}
+            >
+              {downtext}
+            </Text>
+            <Text style={{ color: "snow" }}>주사위: {i}</Text>
+            <Text style={{ color: "snow" }}>{test}</Text>
             <Text>{taleSpacing}</Text>
           </ScrollView>
         </View>
@@ -211,10 +288,6 @@ export default function App() {
 }
 // 아이보리색 : #efeeee
 const styles = StyleSheet.create({
-  master: {
-    flex: 1,
-    backgroundColor: "#121212",
-  },
   safeArea: {
     flex: 0.7,
   },
@@ -223,31 +296,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flex: 0.7,
   },
-  uiText: {
-    fontSize: 15,
-    color: "snow",
-  },
-  uiNum: {
-    fontSize: 30,
-    fontWeight: "bold",
-    color: "snow",
-  },
-  uiHPContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  uiPsyContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  uiBulletContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  uiHamburger: {
+  uiContainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -306,45 +355,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  title: {
-    fontWeight: "bold",
-    fontSize: 30,
-    color: "snow",
-  },
-  text: {
-    fontSize: 20,
-    color: "snow",
-  },
+
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 10,
   },
-  modalView: {
-    margin: 0,
-    backgroundColor: "snow", //모달 배경색
-    borderRadius: 20,
-    padding: 120,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
+
   textStyle: {
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
-    fontSize: 70,
-    fontWeight: "bold",
   },
 });
