@@ -18,8 +18,6 @@ var changedBullet = 0;
 var changedstory = "";
 var spacing = `
 
-
-
   `;
 var taleSpacing = `
 
@@ -51,7 +49,6 @@ export default function App() {
   const [Bullet, setBullet] = useState(0);
 
   const [value, setValue] = React.useState(true);
-  const [test, setTest] = useState(0);
   //다크모드관리
   const [daynightMaster, setDayNightMaster] = useState("#121212");
   const [daynighttext, setDayNightText] = useState("#efeeee");
@@ -87,15 +84,15 @@ export default function App() {
     return Math.floor(Math.random() * (max - min)) + min; //최댓값은 제외, 최솟값은 포함
   }
 
-  const onSetPage = (a, isfate) => {
+  const onSetPage = (a, isfate, chosenText) => {
     if (isfate == 1) {
-      feedback = `
-      
-      당신은 2의 피해를 입었습니다.`;
+      feedback = `<당신은 ${i}의 피해를 입었습니다...>`;
     } else if (isfate == 0) {
       feedback = "";
+      i = "";
+
     }
-    changedstory = changedstory + CrossRoad[a].text + feedback + spacing; // mission: 띄어쓰기 넣기
+    changedstory = changedstory + spacing + "-> " + chosenText + spacing + CrossRoad[a].text + spacing + spacing + feedback + spacing + spacing;
     setTopText(CrossRoad[a].title);
     setDownText(changedstory);
     scrollViewRef.current.scrollToEnd({ animated: true }); //스크롤 관리
@@ -118,10 +115,11 @@ export default function App() {
                 name.buttonID,
                 name.setUI,
                 name.isFate,
-                name.leaveToFate
+                name.leaveToFate,
+                name.text
               );
             } else {
-              NeXtNode(name.nextID, name.buttonID, name.setUI, name.isFate);
+              NeXtNode(name.nextID, name.buttonID, name.setUI, name.isFate, name.leaveToFate, name.text);
             }
           }}
         >
@@ -144,14 +142,14 @@ export default function App() {
     var nowBullet = setBullet(Bullet + changedBullet);
   };
 
-  const NeXtNode = (nextID, nowID, UIdata, isfate, leaveToFate) => {
+  const NeXtNode = (nextID, nowID, UIdata, isfate, leaveToFate, chosenText) => {
     if (isfate == 0) {
       setPressedButtonID(nowID);
-      onSetPage(nextID, isfate);
+      onSetPage(nextID, isfate, chosenText);
       onSetUI(UIdata.setHP, UIdata.setPsy, UIdata.setBullet);
     } else if (isfate == 1) {
       setPressedButtonID(nowID);
-      onSetPage(nextID, isfate);
+      onSetPage(nextID, isfate, chosenText);
       if (leaveToFate == 1) {
         onSetUI(i, 0, 0);
       } else if (leaveToFate == 2) {
@@ -176,18 +174,17 @@ export default function App() {
     setValue(value);
     if (value == true) {
       //darkmode 켬
-      setTest(1);
       setDayNightMaster("#121212");
       setDayNightText("#efeeee");
     } else {
       //daymode 켬
-      setTest(0);
       setDayNightMaster("#efeeee");
       setDayNightText("#121212");
     }
   };
 
   return (
+    
     <SafeAreaView style={{ flex: 1, backgroundColor: daynightMaster }}>
       <View style={styles.safeArea}></View>
       <View style={styles.TopArea}>
@@ -275,7 +272,6 @@ export default function App() {
               {downtext}
             </Text>
             <Text style={{ color: "snow" }}>주사위: {i}</Text>
-            <Text style={{ color: "snow" }}>{test}</Text>
             <Text>{taleSpacing}</Text>
           </ScrollView>
         </View>
