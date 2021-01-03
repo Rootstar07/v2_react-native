@@ -29,7 +29,8 @@
     "react-native-svg": "12.1.0",
     "react-native-web": "~0.13.12",
     "react-navigation-drawer": "^2.6.0",
-    "react-reveal": "^1.2.2"
+    "react-reveal": "^1.2.2",
+    "rn-swipeable-panel": "^1.2.5"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0"

@@ -7,12 +7,9 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
-  Button,
 } from "react-native";
 import data from "./nodesjson.json";
 import Switch from "expo-dark-mode-switch";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import { NavigationContainer } from "@react-navigation/native";
 
 var CrossRoad = data.nodesjson;
 var changedHP = 0;
@@ -202,27 +199,6 @@ export default function App() {
     }
   };
 
-  function HomeScreen({ navigation }) {
-    return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Button
-          onPress={() => navigation.navigate("Notifications")}
-          title="Go to notifications"
-        />
-      </View>
-    );
-  }
-
-  function NotificationsScreen({ navigation }) {
-    return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Button onPress={() => navigation.goBack()} title="Go back home" />
-      </View>
-    );
-  }
-
-  const Drawer = createDrawerNavigator();
-
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: daynightMaster }}>
       <View style={styles.safeArea}></View>
@@ -317,6 +293,10 @@ export default function App() {
       </View>
       <View style={styles.BottomArea}>
         <View style={styles.buttonbox}>{buttonList2}</View>
+        <View style={styles.container}>
+          <Text style={styles.welcome}>Welcome to React Native!</Text>
+          <Text style={styles.instructions}>To get started, edit App.js</Text>
+        </View>
       </View>
     </SafeAreaView>
   );
