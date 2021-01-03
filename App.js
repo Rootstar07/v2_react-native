@@ -7,9 +7,12 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
+  Button,
 } from "react-native";
 import data from "./nodesjson.json";
 import Switch from "expo-dark-mode-switch";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { NavigationContainer } from "@react-navigation/native";
 
 var CrossRoad = data.nodesjson;
 var changedHP = 0;
@@ -90,9 +93,18 @@ export default function App() {
     } else if (isfate == 0) {
       feedback = "";
       i = "";
-
     }
-    changedstory = changedstory + spacing + "-> " + chosenText + spacing + CrossRoad[a].text + spacing + spacing + feedback + spacing + spacing;
+    changedstory =
+      changedstory +
+      spacing +
+      "-> " +
+      chosenText +
+      spacing +
+      CrossRoad[a].text +
+      spacing +
+      feedback +
+      spacing +
+      spacing;
     setTopText(CrossRoad[a].title);
     setDownText(changedstory);
     scrollViewRef.current.scrollToEnd({ animated: true }); //스크롤 관리
@@ -119,7 +131,14 @@ export default function App() {
                 name.text
               );
             } else {
-              NeXtNode(name.nextID, name.buttonID, name.setUI, name.isFate, name.leaveToFate, name.text);
+              NeXtNode(
+                name.nextID,
+                name.buttonID,
+                name.setUI,
+                name.isFate,
+                name.leaveToFate,
+                name.text
+              );
             }
           }}
         >
@@ -183,8 +202,28 @@ export default function App() {
     }
   };
 
+  function HomeScreen({ navigation }) {
+    return (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <Button
+          onPress={() => navigation.navigate("Notifications")}
+          title="Go to notifications"
+        />
+      </View>
+    );
+  }
+
+  function NotificationsScreen({ navigation }) {
+    return (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <Button onPress={() => navigation.goBack()} title="Go back home" />
+      </View>
+    );
+  }
+
+  const Drawer = createDrawerNavigator();
+
   return (
-    
     <SafeAreaView style={{ flex: 1, backgroundColor: daynightMaster }}>
       <View style={styles.safeArea}></View>
       <View style={styles.TopArea}>
@@ -256,6 +295,7 @@ export default function App() {
               fontWeight: "bold",
               fontSize: 30,
               color: daynighttext,
+              margin: 30,
             }}
           >
             {toptext}
@@ -271,7 +311,6 @@ export default function App() {
             >
               {downtext}
             </Text>
-            <Text style={{ color: "snow" }}>주사위: {i}</Text>
             <Text>{taleSpacing}</Text>
           </ScrollView>
         </View>
@@ -300,7 +339,7 @@ const styles = StyleSheet.create({
 
   MiddleArea: {
     flex: 7,
-    alignItems: "center",
+    alignItems: "flex-end",
     justifyContent: "center",
   },
   titlebox: {
