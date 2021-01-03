@@ -11,6 +11,7 @@ import {
 import data from "./nodesjson.json";
 import Switch from "expo-dark-mode-switch";
 import { Modalize } from "react-native-modalize";
+import { AlwaysOpen } from "./AlwaysOpen.js";
 
 var CrossRoad = data.nodesjson;
 var changedHP = 0;
@@ -304,9 +305,7 @@ export default function App() {
           <Text style={{ color: "snow" }}>Open the modal</Text>
         </TouchableOpacity>
 
-        <Modalize ref={modalizeRef}>
-          <Text>...your content</Text>
-        </Modalize>
+        <AlwaysOpen />
       </View>
     </SafeAreaView>
   );
