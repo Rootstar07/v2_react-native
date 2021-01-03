@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import data from "./nodesjson.json";
 import Switch from "expo-dark-mode-switch";
+import { Modalize } from "react-native-modalize";
 
 var CrossRoad = data.nodesjson;
 var changedHP = 0;
@@ -52,6 +53,12 @@ export default function App() {
   //다크모드관리
   const [daynightMaster, setDayNightMaster] = useState("#121212");
   const [daynighttext, setDayNightText] = useState("#efeeee");
+
+  const modalizeRef = useRef();
+
+  const onOpen = () => {
+    modalizeRef.current?.open();
+  };
 
   const scrollViewRef = useRef();
 
@@ -293,10 +300,13 @@ export default function App() {
       </View>
       <View style={styles.BottomArea}>
         <View style={styles.buttonbox}>{buttonList2}</View>
-        <View style={styles.container}>
-          <Text style={styles.welcome}>Welcome to React Native!</Text>
-          <Text style={styles.instructions}>To get started, edit App.js</Text>
-        </View>
+        <TouchableOpacity onPress={onOpen}>
+          <Text style={{ color: "snow" }}>Open the modal</Text>
+        </TouchableOpacity>
+
+        <Modalize ref={modalizeRef}>
+          <Text>...your content</Text>
+        </Modalize>
       </View>
     </SafeAreaView>
   );
