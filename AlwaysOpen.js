@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Modalize } from "react-native-modalize";
 
-export const AlwaysOpen = () => {
+export const AlwaysOpen = (props) => {
   const modalizeRef = useRef(null);
 
   const handleClose = (dest) => {
@@ -13,9 +13,22 @@ export const AlwaysOpen = () => {
 
   const renderContent = () => (
     <View style={s.content}>
-      <Text style={s.content__subheading}>{"Introduction".toUpperCase()}</Text>
-      <Text style={s.content__heading}>Always open modal!</Text>
-      <Text style={s.content__description}></Text>
+      <View style={s.contnet_UI}>
+        <View style={s.uiBox}>
+          <Text style={s.Num}>{props.ui_1}</Text>
+          <Text style={s.Text}>체력</Text>
+        </View>
+        <View style={s.uiBox}>
+          <Text style={s.Num}>{props.ui_2}</Text>
+          <Text style={s.Text}>정신</Text>
+        </View>
+        <View style={s.uiBox}>
+          <Text style={s.Num}>{props.ui_3}</Text>
+          <Text style={s.Text}>총알</Text>
+        </View>
+      </View>
+
+      <Text style={s.content__description}>UI2</Text>
     </View>
   );
 
@@ -35,6 +48,16 @@ const s = StyleSheet.create({
   content: {
     padding: 20,
   },
+  contnet_UI: {
+    flexDirection: "row",
+  },
+  uiBox: {
+    flex: 1,
+    backgroundColor: "lightgrey",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  Num: { fontSize: 35, fontWeight: "bold" },
 
   content__modal: {
     shadowColor: "#000",

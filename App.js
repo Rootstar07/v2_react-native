@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState, useRef } from "react";
 import {
   ScrollView,
@@ -10,7 +9,6 @@ import {
 } from "react-native";
 import data from "./nodesjson.json";
 import Switch from "expo-dark-mode-switch";
-import { Modalize } from "react-native-modalize";
 import { AlwaysOpen } from "./AlwaysOpen.js";
 
 var CrossRoad = data.nodesjson;
@@ -214,63 +212,6 @@ export default function App() {
         <View style={styles.uiContainer}>
           <Switch value={value} onChange={(value) => adminDayNight(value)} />
         </View>
-        <View style={styles.uiContainer}>
-          <Text
-            style={{
-              fontSize: 15,
-              color: daynighttext,
-            }}
-          >
-            체력
-          </Text>
-          <Text
-            style={{
-              fontSize: 30,
-              fontWeight: "bold",
-              color: daynighttext,
-            }}
-          >
-            {HP}
-          </Text>
-        </View>
-        <View style={styles.uiContainer}>
-          <Text
-            style={{
-              fontSize: 15,
-              color: daynighttext,
-            }}
-          >
-            정신
-          </Text>
-          <Text
-            style={{
-              fontSize: 30,
-              fontWeight: "bold",
-              color: daynighttext,
-            }}
-          >
-            {Psy}
-          </Text>
-        </View>
-        <View style={styles.uiContainer}>
-          <Text
-            style={{
-              fontSize: 15,
-              color: daynighttext,
-            }}
-          >
-            총알
-          </Text>
-          <Text
-            style={{
-              fontSize: 30,
-              fontWeight: "bold",
-              color: daynighttext,
-            }}
-          >
-            {Bullet}
-          </Text>
-        </View>
       </View>
       <View style={styles.MiddleArea}>
         <View style={styles.titlebox}>
@@ -301,12 +242,8 @@ export default function App() {
       </View>
       <View style={styles.BottomArea}>
         <View style={styles.buttonbox}>{buttonList2}</View>
-        <TouchableOpacity onPress={onOpen}>
-          <Text style={{ color: "snow" }}>Open the modal</Text>
-        </TouchableOpacity>
-
-        <AlwaysOpen />
       </View>
+      <AlwaysOpen ui_1={HP} ui_2={Psy} ui_3={Bullet} />
     </SafeAreaView>
   );
 }
@@ -341,7 +278,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 25,
   },
   BottomArea: {
-    flex: 3,
+    flex: 4.5,
   },
   //일반버튼
   TouchableOpacityDesign: {
