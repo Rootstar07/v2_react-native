@@ -10,6 +10,11 @@ import {
 import data from "./nodesjson.json";
 import Switch from "expo-dark-mode-switch";
 import { AlwaysOpen } from "./AlwaysOpen.js";
+//노랑 경고창 무시
+import { LogBox } from "react-native";
+import { color } from "react-native-reanimated";
+LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 var CrossRoad = data.nodesjson;
 var changedHP = 0;
@@ -47,11 +52,15 @@ export default function App() {
   const [HP, setHP] = useState(10);
   const [Psy, setPsy] = useState(10);
   const [Bullet, setBullet] = useState(0);
+  const [feedBack, setFeedBack] = useState("");
 
   const [value, setValue] = React.useState(true);
   //다크모드관리
   const [daynightMaster, setDayNightMaster] = useState("#121212");
   const [daynighttext, setDayNightText] = useState("#efeeee");
+  //모달 다크모드
+  const [daynightmodalmaster, setdaynightmodalmaster] = useState("#282825");
+  const [daynightmodaltext, setDayNightModalText] = useState("#bbb");
 
   const modalizeRef = useRef();
 
@@ -92,7 +101,7 @@ export default function App() {
 
   const onSetPage = (a, isfate, chosenText) => {
     if (isfate == 1) {
-      feedback = `<당신은 ${i}의 피해를 입었습니다...>`;
+      feedback = `당신은 ${i}의 피해를 입었습니다...`;
     } else if (isfate == 0) {
       feedback = "";
       i = "";
@@ -196,12 +205,16 @@ export default function App() {
     setValue(value);
     if (value == true) {
       //darkmode 켬
-      setDayNightMaster("#121212");
-      setDayNightText("#efeeee");
+      setDayNightMaster("#121212"); // 기본 배경
+      setDayNightText("#bbb"); // 기본 텍스트
+      setdaynightmodalmaster("#282825"); // 모달 배경
+      setDayNightModalText("#bbb"); // 모달 텍스트
     } else {
-      //daymode 켬
-      setDayNightMaster("#efeeee");
-      setDayNightText("#121212");
+      //darkmode 끔
+      setDayNightMaster("snow"); // 기본 배경
+      setDayNightText("#121212"); // 기본 텍스트
+      setdaynightmodalmaster("#bbb"); // 모달 배경
+      setDayNightModalText("#121212"); //모달 텍스트
     }
   };
 
@@ -243,7 +256,13 @@ export default function App() {
       <View style={styles.BottomArea}>
         <View style={styles.buttonbox}>{buttonList2}</View>
       </View>
-      <AlwaysOpen ui_1={HP} ui_2={Psy} ui_3={Bullet} />
+      <AlwaysOpen
+        ui_1={HP}
+        ui_2={Psy}
+        ui_3={Bullet}
+        modalbackground={daynightmodalmaster}
+        modaltext={daynightmodaltext}
+      />
     </SafeAreaView>
   );
 }
@@ -280,7 +299,7 @@ const styles = StyleSheet.create({
   BottomArea: {
     flex: 4.5,
   },
-  //일반버튼
+  //주사위 버튼
   TouchableOpacityDesign: {
     borderRadius: 10, //테투리 설정
     margin: 2, //버튼 사이 간격
@@ -291,7 +310,7 @@ const styles = StyleSheet.create({
     borderColor: "#585CDE",
     backgroundColor: "#585CDE",
   },
-  //주사위 버튼
+  //일반 버튼
   TouchableOpacityDesign2: {
     borderRadius: 10, //테투리 설정
     margin: 2, //버튼 사이 간격
@@ -302,21 +321,21 @@ const styles = StyleSheet.create({
     borderColor: "#282825",
     backgroundColor: "#282825",
   },
-  buttonFont: {
-    fontSize: 17,
-    color: "snow",
-  },
   startbutton: {
     alignItems: "center",
     justifyContent: "center",
   },
-  buttonFont2: {
+  buttonFont: {
+    //주사위 버튼
     fontSize: 17,
     color: "snow",
-    alignItems: "center",
-    justifyContent: "center",
   },
 
+  buttonFont2: {
+    //일반 버튼
+    fontSize: 17,
+    color: "#bbb",
+  },
   centeredView: {
     flex: 1,
     justifyContent: "center",

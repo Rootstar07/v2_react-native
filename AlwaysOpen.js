@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useState, useRef } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Modalize } from "react-native-modalize";
 
@@ -15,16 +15,40 @@ export const AlwaysOpen = (props) => {
     <View style={s.content}>
       <View style={s.contnet_UI}>
         <View style={s.uiBox}>
-          <Text style={s.Num}>{props.ui_1}</Text>
-          <Text style={s.Text}>체력</Text>
+          <Text
+            style={{
+              fontSize: 35,
+              fontWeight: "bold",
+              color: props.modaltext,
+            }}
+          >
+            {props.ui_1}
+          </Text>
+          <Text style={{ color: props.modaltext }}>체력</Text>
         </View>
         <View style={s.uiBox}>
-          <Text style={s.Num}>{props.ui_2}</Text>
-          <Text style={s.Text}>정신</Text>
+          <Text
+            style={{
+              fontSize: 35,
+              fontWeight: "bold",
+              color: props.modaltext,
+            }}
+          >
+            {props.ui_2}
+          </Text>
+          <Text style={{ color: props.modaltext }}>정신</Text>
         </View>
         <View style={s.uiBox}>
-          <Text style={s.Num}>{props.ui_3}</Text>
-          <Text style={s.Text}>총알</Text>
+          <Text
+            style={{
+              fontSize: 35,
+              fontWeight: "bold",
+              color: props.modaltext,
+            }}
+          >
+            {props.ui_3}
+          </Text>
+          <Text style={{ color: props.modaltext }}>총알</Text>
         </View>
       </View>
 
@@ -35,7 +59,13 @@ export const AlwaysOpen = (props) => {
   return (
     <Modalize
       ref={modalizeRef}
-      modalStyle={s.content__modal}
+      modalStyle={{
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.45,
+        shadowRadius: 16,
+        backgroundColor: props.modalbackground,
+      }}
       alwaysOpen={85}
       handlePosition="inside"
     >
@@ -53,18 +83,12 @@ const s = StyleSheet.create({
   },
   uiBox: {
     flex: 1,
-    backgroundColor: "lightgrey",
+    color: "#bbb",
     alignItems: "center",
     justifyContent: "center",
   },
-  Num: { fontSize: 35, fontWeight: "bold" },
-
-  content__modal: {
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.45,
-    shadowRadius: 16,
-  },
+  Num: { fontSize: 35, fontWeight: "bold", color: "#bbb" },
+  Text: { color: "#bbb" },
 
   content__subheading: {
     marginBottom: 2,
