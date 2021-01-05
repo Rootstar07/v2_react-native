@@ -47,13 +47,14 @@ var i = 0;
 var feedback = "";
 
 export default function App() {
-  const [toptext, setTopText] = useState("");
+  const [toptext, setTopText] = useState(CrossRoad[0].title);
   const [PressedButtonID, setPressedButtonID] = useState(0);
   const [HP, setHP] = useState(10);
   const [Psy, setPsy] = useState(10);
   const [Bullet, setBullet] = useState(0);
-  const [feedBack, setFeedBack] = useState("");
+  const [relationship, setRelationship] = useState(false);
 
+  //다크모드 버튼
   const [value, setValue] = React.useState(true);
   //다크모드관리
   const [daynightMaster, setDayNightMaster] = useState("#121212");
@@ -71,10 +72,6 @@ export default function App() {
   const scrollViewRef = useRef();
 
   const StartGame = () => {
-    //setIndex(TextNodes[index].buttonindex[0]); //수정필요 -> 버튼의 인덱스를 받아 수정
-    // const Node_ID = textNode.options[0].nextID; //Node_ID를 json의 next로 변경 -> 숫자로 하려면 Number(obj)
-    setTopText(CrossRoad[0].title);
-    setDownText(CrossRoad[0].text);
     SetButtonList2(
       CrossRoad[0].options.map((
         name //name이 TextNodes[0].options가 되는 기적!
@@ -199,7 +196,7 @@ export default function App() {
     </TouchableOpacity>,
   ]);
 
-  const [downtext, setDownText] = useState([""]);
+  const [downtext, setDownText] = useState([CrossRoad[0].text]);
 
   const adminDayNight = (value) => {
     setValue(value);
