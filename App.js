@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import data from "./nodesjson.json";
-import list from "./modalPeopleList.json";
 import Switch from "expo-dark-mode-switch";
 import { AlwaysOpen } from "./AlwaysOpen.js";
 //노랑 경고창 무시
@@ -20,7 +19,6 @@ LogBox.ignoreAllLogs(); //Ignore all log notifications
 var CrossRoad = data.nodesjson;
 var ModalList = data.list;
 var newModalList = [];
-var changedList = [];
 var changedHP = 0;
 var changedPsy = 0;
 var changedBullet = 0;
@@ -183,12 +181,19 @@ export default function App() {
   };
 
   const makeNewModalList = (ID) => {
-    newModalList = [...newModalList, ModalList[ID]];
+    newModalList = [...newModalList, ModalList[ID].name];
     setModalRelList(
       newModalList.map((list) => (
         <View>
           <Text
-            style={{ color: "snow", backgroundColor: "orange", fontSize: 30 }}
+            style={{
+              color: "#bbb",
+              fontSize: 20,
+              padding: 30,
+              backgroundColor: "#121212",
+              borderRadius: 10,
+              margin: 7,
+            }}
           >
             {list}
           </Text>
@@ -196,8 +201,6 @@ export default function App() {
       ))
     );
   };
-
-  const relManager = (changedRelID, value) => {};
 
   const NeXtNode = (nextID, nowID, UIdata, isfate, leaveToFate, chosenText) => {
     if (isfate == 0) {
