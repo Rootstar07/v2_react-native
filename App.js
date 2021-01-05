@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -10,6 +10,7 @@ import {
 import data from "./nodesjson.json";
 import Switch from "expo-dark-mode-switch";
 import { AlwaysOpen } from "./AlwaysOpen.js";
+import Toast from "react-native-fast-toast";
 //노랑 경고창 무시
 import { LogBox } from "react-native";
 import { color } from "react-native-reanimated";
@@ -56,6 +57,7 @@ export default function App() {
   const [Psy, setPsy] = useState(10);
   const [Bullet, setBullet] = useState(0);
   const [modalrel, setModalRel] = useState();
+  const toast = useRef(null);
 
   //다크모드 버튼
   const [value, setValue] = React.useState(true);
@@ -67,6 +69,10 @@ export default function App() {
   const [daynightmodaltext, setDayNightModalText] = useState("#bbb");
 
   const modalizeRef = useRef();
+
+  useEffect(() => {
+    toast.current.show("Task finished successfully");
+  }, []);
 
   const onOpen = () => {
     modalizeRef.current?.open();
@@ -289,6 +295,7 @@ export default function App() {
               }}
             >
               {downtext}
+              <Toast ref={toast} />
             </Text>
             <Text>{taleSpacing}</Text>
           </ScrollView>
