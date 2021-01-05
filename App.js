@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import data from "./nodesjson.json";
+import list from "./modalPeopleList.json";
 import Switch from "expo-dark-mode-switch";
 import { AlwaysOpen } from "./AlwaysOpen.js";
 //노랑 경고창 무시
@@ -17,10 +18,14 @@ LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 var CrossRoad = data.nodesjson;
+var ModalList = data.list;
+var newModalList = [];
+var changedList = [];
 var changedHP = 0;
 var changedPsy = 0;
 var changedBullet = 0;
 var changedstory = "";
+
 var spacing = `
 
   `;
@@ -53,7 +58,6 @@ export default function App() {
   const [Psy, setPsy] = useState(10);
   const [Bullet, setBullet] = useState(0);
   const [modalrel, setModalRel] = useState();
-  const [modalrellist, setModalRelList] = useState();
 
   //다크모드 버튼
   const [value, setValue] = React.useState(true);
@@ -71,8 +75,6 @@ export default function App() {
   };
 
   const scrollViewRef = useRef();
-
-  const modalpeople = ["가", "나", "다"];
 
   const StartGame = () => {
     SetButtonList2(
@@ -170,41 +172,32 @@ export default function App() {
     // 1. isrel 체크 맞다면 2. isnew와 relchanged 체크 후 변화
     if (isrel.isrel === true) {
       setModalRel(1);
-      {
-        if (isrel.isnewpeople[0] === true)
-          makeNewModalList(isrel.isnewpeople[1]);
-
-        if (isrel.relchanged[0] === true) {
-          relManager(isrel.relchanged[1], isrel.relchanged[2]);
-        }
+      if (isrel.isnewpeople[0] === true) {
+        makeNewModalList(isrel.isnewpeople[1]);
+        setModalRel("true");
       }
-    } else if (isrel.isrel === false) {
+      if (isrel.relchanged[0] === true) setModalRel("2");
+    } else {
       setModalRel(0);
     }
   };
+
   const makeNewModalList = (ID) => {
+    newModalList = [...newModalList, ModalList[ID]];
     setModalRelList(
-      <View style={{ backgroundColor: "snow" }}>
-        <Text style={{ fontSize: 30, color: "#bbb", margin: 10 }}>
-          {modalpeople[ID]}
-        </Text>
-        <Text style={{ fontSize: 30, color: "#bbb", margin: 10 }}>
-          {modalpeople[ID]}
-        </Text>
-      </View>
+      newModalList.map((list) => (
+        <View>
+          <Text
+            style={{ color: "snow", backgroundColor: "orange", fontSize: 30 }}
+          >
+            {list}
+          </Text>
+        </View>
+      ))
     );
   };
 
   const relManager = (changedRelID, value) => {};
-
-  const onSetUI = (hp, psy, bullet) => {
-    changedHP = changedHP + hp;
-    changedPsy = changedPsy + psy;
-    changedBullet = changedBullet + bullet;
-    var nowHp = setHP(HP + changedHP);
-    var nowPsy = setPsy(Psy + changedPsy);
-    var nowBullet = setBullet(Bullet + changedBullet);
-  };
 
   const NeXtNode = (nextID, nowID, UIdata, isfate, leaveToFate, chosenText) => {
     if (isfate == 0) {
@@ -224,6 +217,15 @@ export default function App() {
     }
   };
 
+  const onSetUI = (hp, psy, bullet) => {
+    changedHP = changedHP + hp;
+    changedPsy = changedPsy + psy;
+    changedBullet = changedBullet + bullet;
+    var nowHp = setHP(HP + changedHP);
+    var nowPsy = setPsy(Psy + changedPsy);
+    var nowBullet = setBullet(Bullet + changedBullet);
+  };
+
   const [buttonList2, SetButtonList2] = useState([
     <TouchableOpacity onPress={StartGame}>
       <View style={styles.startbutton}>
@@ -231,6 +233,8 @@ export default function App() {
       </View>
     </TouchableOpacity>,
   ]);
+
+  const [modalrellist, setModalRelList] = useState([<Text>Hello</Text>]);
 
   const [downtext, setDownText] = useState([CrossRoad[0].text]);
 
