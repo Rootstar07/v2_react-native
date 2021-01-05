@@ -52,7 +52,8 @@ export default function App() {
   const [HP, setHP] = useState(10);
   const [Psy, setPsy] = useState(10);
   const [Bullet, setBullet] = useState(0);
-  const [modalpeople, setModalPeople] = useState();
+  const [modalrel, setModalRel] = useState();
+  const [modalrellist, setModalRelList] = useState();
 
   //다크모드 버튼
   const [value, setValue] = React.useState(true);
@@ -70,6 +71,8 @@ export default function App() {
   };
 
   const scrollViewRef = useRef();
+
+  const modalpeople = ["가", "나", "다"];
 
   const StartGame = () => {
     SetButtonList2(
@@ -116,7 +119,7 @@ export default function App() {
       spacing;
     setTopText(CrossRoad[a].title);
     setDownText(changedstory);
-    manageModalPeople(CrossRoad[a].relationship[0].isrelationship);
+    manageModalrel(CrossRoad[a].rel[0]);
 
     scrollViewRef.current.scrollToEnd({ animated: true }); //스크롤 관리
     //버튼생성
@@ -163,13 +166,37 @@ export default function App() {
     );
   };
 
-  const manageModalPeople = (isrel) => {
-    if (isrel === true) {
-      setModalPeople(1);
-    } else if (isrel === false) {
-      setModalPeople(0);
+  const manageModalrel = (isrel) => {
+    // 1. isrel 체크 맞다면 2. isnew와 relchanged 체크 후 변화
+    if (isrel.isrel === true) {
+      setModalRel(1);
+      {
+        if (isrel.isnewpeople[0] === true)
+          makeNewModalList(isrel.isnewpeople[1]);
+
+        if (isrel.relchanged[0] === true) {
+          relManager(isrel.relchanged[1], isrel.relchanged[2]);
+        }
+      }
+    } else if (isrel.isrel === false) {
+      setModalRel(0);
     }
   };
+  s;
+  const makeNewModalList = (ID) => {
+    setModalRelList(
+      <View style={{ backgroundColor: "snow" }}>
+        <Text style={{ fontSize: 30, color: "#bbb", margin: 10 }}>
+          {modalpeople[ID]}
+        </Text>
+        <Text style={{ fontSize: 30, color: "#bbb", margin: 10 }}>
+          {modalpeople[ID]}
+        </Text>
+      </View>
+    );
+  };
+
+  const relManager = (changedRelID, value) => {};
 
   const onSetUI = (hp, psy, bullet) => {
     changedHP = changedHP + hp;
@@ -244,7 +271,7 @@ export default function App() {
             }}
           >
             {toptext}
-            {modalpeople}
+            {modalrel}
           </Text>
         </View>
         <View style={styles.textbox}>
@@ -270,6 +297,7 @@ export default function App() {
         ui_3={Bullet}
         modalbackground={daynightmodalmaster}
         modaltext={daynightmodaltext}
+        modallist={modalrellist}
       />
     </SafeAreaView>
   );

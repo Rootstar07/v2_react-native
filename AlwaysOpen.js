@@ -12,47 +12,49 @@ export const AlwaysOpen = (props) => {
   };
 
   const renderContent = () => (
-    <View style={s.content}>
-      <View style={s.contnet_UI}>
-        <View style={s.uiBox}>
-          <Text
-            style={{
-              fontSize: 35,
-              fontWeight: "bold",
-              color: props.modaltext,
-            }}
-          >
-            {props.ui_1}
-          </Text>
-          <Text style={{ color: props.modaltext }}>체력</Text>
+    <View style={s.master}>
+      <View style={s.content}>
+        <View style={s.contnet_UI}>
+          <View style={s.uiBox}>
+            <Text
+              style={{
+                fontSize: 35,
+                fontWeight: "bold",
+                color: props.modaltext,
+              }}
+            >
+              {props.ui_1}
+            </Text>
+            <Text style={{ color: props.modaltext }}>체력</Text>
+          </View>
+          <View style={s.uiBox}>
+            <Text
+              style={{
+                fontSize: 35,
+                fontWeight: "bold",
+                color: props.modaltext,
+              }}
+            >
+              {props.ui_2}
+            </Text>
+            <Text style={{ color: props.modaltext }}>정신</Text>
+          </View>
+          <View style={s.uiBox}>
+            <Text
+              style={{
+                fontSize: 35,
+                fontWeight: "bold",
+                color: props.modaltext,
+              }}
+            >
+              {props.ui_3}
+            </Text>
+            <Text style={{ color: props.modaltext }}>총알</Text>
+          </View>
         </View>
-        <View style={s.uiBox}>
-          <Text
-            style={{
-              fontSize: 35,
-              fontWeight: "bold",
-              color: props.modaltext,
-            }}
-          >
-            {props.ui_2}
-          </Text>
-          <Text style={{ color: props.modaltext }}>정신</Text>
-        </View>
-        <View style={s.uiBox}>
-          <Text
-            style={{
-              fontSize: 35,
-              fontWeight: "bold",
-              color: props.modaltext,
-            }}
-          >
-            {props.ui_3}
-          </Text>
-          <Text style={{ color: props.modaltext }}>총알</Text>
-        </View>
+        <Text style={s.content__description}>관계</Text>
       </View>
-
-      <Text style={s.content__description}>UI2</Text>
+      {props.modallist}
     </View>
   );
 
@@ -75,12 +77,14 @@ export const AlwaysOpen = (props) => {
 };
 
 const s = StyleSheet.create({
+  master: {},
   content: {
     padding: 20,
   },
   contnet_UI: {
     flexDirection: "row",
   },
+
   uiBox: {
     flex: 1,
     color: "#bbb",
@@ -108,9 +112,15 @@ const s = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
 
-    fontSize: 15,
+    fontSize: 20,
     fontWeight: "200",
     lineHeight: 22,
     color: "#666",
+  },
+  content__list: {
+    fontSize: 30,
+    color: "#bbb",
+    flex: 1,
+    margin: 20,
   },
 });
