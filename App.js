@@ -52,7 +52,7 @@ export default function App() {
   const [HP, setHP] = useState(10);
   const [Psy, setPsy] = useState(10);
   const [Bullet, setBullet] = useState(0);
-  const [relationship, setRelationship] = useState(false);
+  const [modalpeople, setModalPeople] = useState();
 
   //다크모드 버튼
   const [value, setValue] = React.useState(true);
@@ -116,6 +116,8 @@ export default function App() {
       spacing;
     setTopText(CrossRoad[a].title);
     setDownText(changedstory);
+    manageModalPeople(CrossRoad[a].relationship[0].isrelationship);
+
     scrollViewRef.current.scrollToEnd({ animated: true }); //스크롤 관리
     //버튼생성
 
@@ -159,6 +161,14 @@ export default function App() {
         </TouchableOpacity>
       ))
     );
+  };
+
+  const manageModalPeople = (isrel) => {
+    if (isrel === true) {
+      setModalPeople(1);
+    } else if (isrel === false) {
+      setModalPeople(0);
+    }
   };
 
   const onSetUI = (hp, psy, bullet) => {
@@ -234,6 +244,7 @@ export default function App() {
             }}
           >
             {toptext}
+            {modalpeople}
           </Text>
         </View>
         <View style={styles.textbox}>

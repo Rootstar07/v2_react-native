@@ -45,9 +45,8 @@
         "밖에는 총을 든 두명의 사내가 어색한 표정으로 서 있습니다",
         "relationship": [
           {
-            "isrelationship": false,
-            "isnewpeople" : true,
-            "newpeopleID" : 1
+            "isrelationship": true,
+            "isnewpeople" : [true, 1]
           }
   
         ],
@@ -80,6 +79,14 @@
       "id": 2,
       "text":
         "'살려주시오' 그들은 당신에게 말합니다.",
+        "relationship": [
+          {
+            "isrelationship":true,
+            "isnewpeople" : [false],
+            "relationshipchanged" : [true, 1, -1]
+          }
+  
+        ],
       "options": [
         {
           "text": "그들에게 먹을 것을 내어 준다.",
