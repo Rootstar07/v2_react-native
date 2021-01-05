@@ -182,7 +182,6 @@ export default function App() {
       setModalRel(0);
     }
   };
-  s;
   const makeNewModalList = (ID) => {
     setModalRelList(
       <View style={{ backgroundColor: "snow" }}>
