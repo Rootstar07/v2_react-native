@@ -52,14 +52,50 @@ var i = 0;
 var feedback = "";
 var reflist = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
+const rellist = [
+  {
+    id: 0,
+    value: 0,
+  },
+  {
+    id: 0,
+    value: 0,
+  },
+  {
+    id: 0,
+    value: 0,
+  },
+  {
+    id: 0,
+    value: 0,
+  },
+  {
+    id: 0,
+    value: 0,
+  },
+  {
+    id: 0,
+    value: 0,
+  },
+  {
+    id: 0,
+    value: 0,
+  },
+  {
+    id: 0,
+    value: 0,
+  },
+];
+
 export default function App() {
   const [toptext, setTopText] = useState(CrossRoad[0].title);
   const [PressedButtonID, setPressedButtonID] = useState(0);
   const [HP, setHP] = useState(10);
   const [Psy, setPsy] = useState(10);
   const [Bullet, setBullet] = useState(0);
-  const [modalrel, setModalRel] = useState();
   const toast = useRef(null);
+
+  const [test, setTest] = useState();
 
   //다크모드 버튼
   const [value, setValue] = React.useState(true);
@@ -70,15 +106,9 @@ export default function App() {
   const [daynightmodalmaster, setdaynightmodalmaster] = useState("#282825");
   const [daynightmodaltext, setDayNightModalText] = useState("#bbb");
 
-  const modalizeRef = useRef();
-
   useEffect(() => {
     toast.current.show("Task finished successfully");
   }, []);
-
-  const onOpen = () => {
-    modalizeRef.current?.open();
-  };
 
   const scrollViewRef = useRef();
 
@@ -88,7 +118,7 @@ export default function App() {
         name //name이 TextNodes[0].options가 되는 기적!
       ) => (
         <TouchableOpacity
-          style={styles.TouchableOpacityDesign}
+          style={styles.ButFate}
           key={name.buttonID}
           onPress={() =>
             NeXtNode(name.nextID, name.buttonID, name.setUI, name.isFate)
@@ -106,6 +136,49 @@ export default function App() {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min; //최댓값은 제외, 최솟값은 포함
   }
+
+  const manageModalrel = (isrel) => {
+    if (isrel[0] === true) {
+      makeNewModalList(isrel[1], isrel[2]);
+    } else {
+    }
+  };
+
+  const makeNewModalList = (ID, value) => {
+    newModalList = [
+      ...newModalList,
+      { name: ModalList[ID].name, value: value, key: ID },
+    ];
+
+    if (reflist[ID] < ModalList[ID].maxStep) {
+      reflist[ID] = reflist[ID] + value;
+      rellist[ID].value = reflist[ID];
+    }
+
+    // 1. 오브젝트 중복제거
+    let uniqueList = Array.from(
+      newModalList.reduce((m, t) => m.set(t.key, t), new Map()).values()
+    );
+
+    setModalRelList(
+      uniqueList.map((list) => (
+        <View>
+          <Text
+            style={{
+              color: "#bbb",
+              fontSize: 20,
+              padding: 30,
+              backgroundColor: "#121212",
+              borderRadius: 10,
+              margin: 7,
+            }}
+          >
+            {list.name}: {reflist[list.key]}
+          </Text>
+        </View>
+      ))
+    );
+  };
 
   const onSetPage = (a, isfate, chosenText) => {
     if (isfate == 1) {
@@ -136,31 +209,49 @@ export default function App() {
       CrossRoad[a].options.map((name) => (
         <TouchableOpacity
           style={[
-            name.isFate == true
-              ? styles.TouchableOpacityDesign
-              : styles.TouchableOpacityDesign2,
+            name.RelBut[0] == true
+              ? styles.ButRel
+              : name.isFate == true
+              ? styles.ButFate
+              : styles.ButBasic,
           ]}
           key={name.buttonID}
           onPress={() => {
-            if (name.isFate == true) {
-              i = getRandomInt(name.range[0], name.range[1]);
-              NeXtNode(
-                name.nextID,
-                name.buttonID,
-                name.setUI,
-                name.isFate,
-                name.leaveToFate,
-                name.text
-              );
+            if (name.RelBut[0] === true) {
+              if (rellist[name.RelBut[1]].value > name.RelBut[2]) {
+                NeXtNode(
+                  name.nextID,
+                  name.buttonID,
+                  name.setUI,
+                  name.isFate,
+                  name.leaveToFate,
+                  name.text
+                );
+              } else {
+                //토스트 알림 넣기
+                setTest("관계도가 부족해요!");
+              }
             } else {
-              NeXtNode(
-                name.nextID,
-                name.buttonID,
-                name.setUI,
-                name.isFate,
-                name.leaveToFate,
-                name.text
-              );
+              if (name.isFate == true) {
+                i = getRandomInt(name.range[0], name.range[1]);
+                NeXtNode(
+                  name.nextID,
+                  name.buttonID,
+                  name.setUI,
+                  name.isFate,
+                  name.leaveToFate,
+                  name.text
+                );
+              } else {
+                NeXtNode(
+                  name.nextID,
+                  name.buttonID,
+                  name.setUI,
+                  name.isFate,
+                  name.leaveToFate,
+                  name.text
+                );
+              }
             }
           }}
         >
@@ -170,59 +261,6 @@ export default function App() {
             {name.text}
           </Text>
         </TouchableOpacity>
-      ))
-    );
-  };
-
-  const manageModalrel = (isrel) => {
-    if (isrel[0] === true) {
-      setModalRel(1);
-      makeNewModalList(isrel[1], isrel[2]);
-    } else {
-      setModalRel(0);
-    }
-  };
-
-  const makeNewModalList = (ID, value) => {
-    //newModalList = [...newModalList, ModalList[ID].name];
-    // 1.  중복배열 제거
-    //newModalList = [...new Set(newModalList)];
-
-    //ModalRef[ID].name = ModalList[ID].name;
-    //ModalRef[ID].value = ModalRef[ID].value + value;
-
-    // 2.  새로운 배열 생성 + 업데이트된 관계도
-
-    newModalList = [
-      ...newModalList,
-      { name: ModalList[ID].name, value: value, key: ID },
-    ];
-
-    if (reflist[ID] < ModalList[ID].maxStep) {
-      reflist[ID] = reflist[ID] + value;
-    }
-
-    // 1. 오브젝트 중복제거
-    let uniqueList = Array.from(
-      newModalList.reduce((m, t) => m.set(t.key, t), new Map()).values()
-    );
-
-    setModalRelList(
-      uniqueList.map((list) => (
-        <View>
-          <Text
-            style={{
-              color: "#bbb",
-              fontSize: 20,
-              padding: 30,
-              backgroundColor: "#121212",
-              borderRadius: 10,
-              margin: 7,
-            }}
-          >
-            {list.name}: {reflist[list.key]}
-          </Text>
-        </View>
       ))
     );
   };
@@ -302,7 +340,7 @@ export default function App() {
             }}
           >
             {toptext}
-            {modalrel}
+            {test}
           </Text>
         </View>
         <View style={styles.textbox}>
@@ -367,8 +405,20 @@ const styles = StyleSheet.create({
   BottomArea: {
     flex: 4.5,
   },
+
+  ButRel: {
+    borderRadius: 10, //테투리 설정
+    margin: 2, //버튼 사이 간격
+    marginHorizontal: 15, //버튼 폭
+    paddingHorizontal: 30, //버튼 내부 수평
+    paddingVertical: 12, //버튼 내부 수직
+    borderWidth: 3,
+    borderColor: "skyblue",
+    backgroundColor: "skyblue",
+  },
+
   //주사위 버튼
-  TouchableOpacityDesign: {
+  ButFate: {
     borderRadius: 10, //테투리 설정
     margin: 2, //버튼 사이 간격
     marginHorizontal: 15, //버튼 폭
@@ -379,7 +429,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#585CDE",
   },
   //일반 버튼
-  TouchableOpacityDesign2: {
+  ButBasic: {
     borderRadius: 10, //테투리 설정
     margin: 2, //버튼 사이 간격
     marginHorizontal: 15, //버튼 폭
