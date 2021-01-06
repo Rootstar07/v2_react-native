@@ -125,7 +125,7 @@ export default function App() {
       spacing;
     setTopText(CrossRoad[a].title);
     setDownText(changedstory);
-    manageModalrel(CrossRoad[a].rel[0]);
+    manageModalrel(CrossRoad[a].rel);
 
     scrollViewRef.current.scrollToEnd({ animated: true }); //스크롤 관리
     //버튼생성
@@ -174,19 +174,15 @@ export default function App() {
 
   const manageModalrel = (isrel) => {
     // 1. isrel 체크 맞다면 2. isnew와 relchanged 체크 후 변화
-    if (isrel.isrel === true) {
+    if (isrel[0] === true) {
       setModalRel(1);
-      if (isrel.isnewpeople[0] === true) {
-        makeNewModalList(isrel.isnewpeople[1]);
-        setModalRel("true");
-      }
-      if (isrel.relchanged[0] === true) setModalRel("2");
+      makeNewModalList(isrel[1], isrel[2]);
     } else {
       setModalRel(0);
     }
   };
 
-  const makeNewModalList = (ID) => {
+  const makeNewModalList = (ID, value) => {
     newModalList = [...newModalList, ModalList[ID].name];
     setModalRelList(
       newModalList.map((list) => (
@@ -201,7 +197,7 @@ export default function App() {
               margin: 7,
             }}
           >
-            {list}
+            {list}: {value}
           </Text>
         </View>
       ))
