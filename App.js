@@ -19,11 +19,12 @@ LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 var CrossRoad = data.nodesjson;
 var ModalList = data.list;
-var newModalList = [];
+
 var changedHP = 0;
 var changedPsy = 0;
 var changedBullet = 0;
 var changedstory = "";
+var newModalList = [];
 
 var spacing = `
 
@@ -49,6 +50,7 @@ var taleSpacing = `
 `;
 var i = 0;
 var feedback = "";
+var reflist = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 export default function App() {
   const [toptext, setTopText] = useState(CrossRoad[0].title);
@@ -173,7 +175,6 @@ export default function App() {
   };
 
   const manageModalrel = (isrel) => {
-    // 1. isrel 체크 맞다면 2. isnew와 relchanged 체크 후 변화
     if (isrel[0] === true) {
       setModalRel(1);
       makeNewModalList(isrel[1], isrel[2]);
@@ -183,9 +184,31 @@ export default function App() {
   };
 
   const makeNewModalList = (ID, value) => {
-    newModalList = [...newModalList, ModalList[ID].name];
+    //newModalList = [...newModalList, ModalList[ID].name];
+    // 1.  중복배열 제거
+    //newModalList = [...new Set(newModalList)];
+
+    //ModalRef[ID].name = ModalList[ID].name;
+    //ModalRef[ID].value = ModalRef[ID].value + value;
+
+    // 2.  새로운 배열 생성 + 업데이트된 관계도
+
+    newModalList = [
+      ...newModalList,
+      { name: ModalList[ID].name, value: value, key: ID },
+    ];
+
+    if (reflist[ID] < ModalList[ID].maxStep) {
+      reflist[ID] = reflist[ID] + value;
+    }
+
+    // 1. 오브젝트 중복제거
+    let uniqueList = Array.from(
+      newModalList.reduce((m, t) => m.set(t.key, t), new Map()).values()
+    );
+
     setModalRelList(
-      newModalList.map((list) => (
+      uniqueList.map((list) => (
         <View>
           <Text
             style={{
@@ -197,7 +220,7 @@ export default function App() {
               margin: 7,
             }}
           >
-            {list}: {value}
+            {list.name}: {reflist[list.key]}
           </Text>
         </View>
       ))

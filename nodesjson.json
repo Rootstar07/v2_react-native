@@ -36,21 +36,24 @@
           "nextID": 1,
           "isFate": true,
           "range":[-2, 0],
-          "leaveToFate" : 1
+          "leaveToFate" : 1,
+          "RelBut": [false]
         },
         {
           "buttonID": 2,
           "text": "다시 잔다.",
           "nextID": 1,
           "isFate": false,
-          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
+          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0},
+          "RelBut": [false]
         },
         {
           "buttonID": 3,
           "text": "상황을 지켜본다.",
           "nextID": 1,
           "isFate": false,
-          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
+          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0},
+          "RelBut": [false]
           
         }
         
@@ -61,7 +64,7 @@
       "id": 1,
       "text":
         "밖에는 총을 든 두명의 사내가 어색한 표정으로 서 있습니다",
-        "rel": [true, 1 , 1],
+        "rel": [true, 0 , 1],
          
       "options": [
         {
@@ -69,21 +72,24 @@
           "text": "그들을 위협한다.",
           "nextID": 2,
           "isFate": false,
-          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
+          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0},
+          "RelBut": [false]
         },
         {
           "buttonID": 2,
           "text": "그들을 말을 들어본다.",
           "nextID": 0,
           "isFate": false,
-          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
+          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0},
+          "RelBut": [false]
         },
         {
           "buttonID": 3,
           "text": "눈치를 보며 주변의 무기를 찾는다.",
           "nextID": 2,
           "isFate": false,
-          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
+          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0},
+          "RelBut": [false]
         }
       ]
     },
@@ -92,28 +98,64 @@
       "id": 2,
       "text":
         "'살려주시오' 그들은 당신에게 말합니다.",
-        "rel": [true, 0 , 1],
+        "rel": [true, 2 , 1],
        
       "options": [
         {
           "text": "그들에게 먹을 것을 내어 준다.",
+          "nextID": 3,
+          "isFate": false,
+          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0},
+          "RelBut": [false]
+        },
+        {
+          "text": "그들을 내쫒는다.",
+          "nextID": 3,
+          "isFate": true,
+          "range":[-2, 0],
+          "leaveToFate" : 2,
+          "RelBut": [false]
+        },
+        {
+          "text": "말을 좀 더 들어본다.",
+          "nextID": 3,
+          "isFate": true,
+          "range":[0, 3],
+          "leaveToFate" : 3,
+          "RelBut": [false]
+        }
+      ]
+    },
+    {
+      "title": "선택",
+      "id": 3,
+      "text":
+        "관계가 있다면 선 가능",
+        "rel": [false],
+       
+      "options": [
+        {
+          "text": "관계 선택지",
           "nextID": 0,
           "isFate": false,
-          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0}
+          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0},
+          "RelBut": [true, 0, 2]
         },
         {
           "text": "그들을 내쫒는다.",
           "nextID": 0,
           "isFate": true,
           "range":[-2, 0],
-          "leaveToFate" : 2
+          "leaveToFate" : 2,
+          "RelBut": [false]
         },
         {
           "text": "말을 좀 더 들어본다.",
           "nextID": 0,
           "isFate": true,
           "range":[0, 3],
-          "leaveToFate" : 3
+          "leaveToFate" : 3,
+          "RelBut": [false]
         }
       ]
     }
