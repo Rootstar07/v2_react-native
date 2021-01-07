@@ -11,6 +11,7 @@ import data from "./nodesjson.json";
 import Switch from "expo-dark-mode-switch";
 import { AlwaysOpen } from "./AlwaysOpen.js";
 import Toast from "react-native-fast-toast";
+
 //노랑 경고창 무시
 import { LogBox } from "react-native";
 import { color } from "react-native-reanimated";
@@ -93,9 +94,6 @@ export default function App() {
   const [HP, setHP] = useState(10);
   const [Psy, setPsy] = useState(10);
   const [Bullet, setBullet] = useState(0);
-  const toast = useRef(null);
-
-  const [test, setTest] = useState();
 
   //다크모드 버튼
   const [value, setValue] = React.useState(true);
@@ -105,10 +103,6 @@ export default function App() {
   //모달 다크모드
   const [daynightmodalmaster, setdaynightmodalmaster] = useState("#282825");
   const [daynightmodaltext, setDayNightModalText] = useState("#bbb");
-
-  useEffect(() => {
-    toast.current.show("Task finished successfully");
-  }, []);
 
   const scrollViewRef = useRef();
 
@@ -124,7 +118,7 @@ export default function App() {
             NeXtNode(name.nextID, name.buttonID, name.setUI, name.isFate)
           } //배열 안의 오브젝트라도 손쉽게 다룰수있게 되었다.
         >
-          <Text style={styles.buttonFont}>{name.text}</Text>
+          <Text style={styles.fateButFont}>{name.text}</Text>
         </TouchableOpacity>
       ))
       //12.26 버튼이 문제가 아니라 SetPressedButtonID(여기)가 문제였다. 왜일까?
@@ -210,7 +204,9 @@ export default function App() {
         <TouchableOpacity
           style={[
             name.RelBut[0] == true
-              ? styles.ButRel
+              ? rellist[name.RelBut[1]].value > name.RelBut[2]
+                ? styles.ButRelT
+                : styles.ButRelF //세부 판정: 가능할때 불가능할때 색 변화
               : name.isFate == true
               ? styles.ButFate
               : styles.ButBasic,
@@ -228,35 +224,35 @@ export default function App() {
                   name.text
                 );
               } else {
-                //토스트 알림 넣기
-                setTest("관계도가 부족해요!");
+                toast.show("관계도가 부족해요", {
+                  style: { backgroundColor: "#e54b4b" },
+                });
               }
             } else {
               if (name.isFate == true) {
                 i = getRandomInt(name.range[0], name.range[1]);
-                NeXtNode(
-                  name.nextID,
-                  name.buttonID,
-                  name.setUI,
-                  name.isFate,
-                  name.leaveToFate,
-                  name.text
-                );
-              } else {
-                NeXtNode(
-                  name.nextID,
-                  name.buttonID,
-                  name.setUI,
-                  name.isFate,
-                  name.leaveToFate,
-                  name.text
-                );
               }
+              NeXtNode(
+                name.nextID,
+                name.buttonID,
+                name.setUI,
+                name.isFate,
+                name.leaveToFate,
+                name.text
+              );
             }
           }}
         >
           <Text
-            style={[name.isFate == 1 ? styles.buttonFont : styles.buttonFont2]}
+            style={[
+              name.RelBut[0] === true
+                ? rellist[name.RelBut[1]].value > name.RelBut[2]
+                  ? styles.relButFontT
+                  : styles.relButFontF
+                : name.isFate == 1
+                ? styles.fateButFont
+                : styles.basicButFont,
+            ]}
           >
             {name.text}
           </Text>
@@ -295,7 +291,7 @@ export default function App() {
   const [buttonList2, SetButtonList2] = useState([
     <TouchableOpacity onPress={StartGame}>
       <View style={styles.startbutton}>
-        <Text style={styles.buttonFont2}>시작하기</Text>
+        <Text style={styles.basicButFont}>시작하기</Text>
       </View>
     </TouchableOpacity>,
   ]);
@@ -340,7 +336,6 @@ export default function App() {
             }}
           >
             {toptext}
-            {test}
           </Text>
         </View>
         <View style={styles.textbox}>
@@ -352,7 +347,6 @@ export default function App() {
               }}
             >
               {downtext}
-              <Toast ref={toast} />
             </Text>
             <Text>{taleSpacing}</Text>
           </ScrollView>
@@ -369,10 +363,11 @@ export default function App() {
         modaltext={daynightmodaltext}
         modallist={modalrellist}
       />
+      <Toast ref={(ref) => (global["toast"] = ref)} placement="top" />
     </SafeAreaView>
   );
 }
-// 아이보리색 : #efeeee
+
 const styles = StyleSheet.create({
   safeArea: {
     flex: 0.7,
@@ -406,19 +401,33 @@ const styles = StyleSheet.create({
     flex: 4.5,
   },
 
-  ButRel: {
+  ButRelT: {
+    //관계 선택지 활성화
     borderRadius: 10, //테투리 설정
     margin: 2, //버튼 사이 간격
     marginHorizontal: 15, //버튼 폭
     paddingHorizontal: 30, //버튼 내부 수평
     paddingVertical: 12, //버튼 내부 수직
     borderWidth: 3,
-    borderColor: "skyblue",
-    backgroundColor: "skyblue",
+    borderColor: "#61Bfad",
+    backgroundColor: "#61Bfad",
   },
 
-  //주사위 버튼
+  ButRelF: {
+    //관계 선택지 비활성화
+    borderRadius: 10, //테투리 설정
+    margin: 2, //버튼 사이 간격
+    marginHorizontal: 15, //버튼 폭
+    paddingHorizontal: 30, //버튼 내부 수평
+    paddingVertical: 12, //버튼 내부 수직
+    borderWidth: 3,
+    borderColor: "#e54b4b",
+    backgroundColor: "#e54b4b",
+    color: "snow",
+  },
+
   ButFate: {
+    //주사위 버튼
     borderRadius: 10, //테투리 설정
     margin: 2, //버튼 사이 간격
     marginHorizontal: 15, //버튼 폭
@@ -428,8 +437,9 @@ const styles = StyleSheet.create({
     borderColor: "#585CDE",
     backgroundColor: "#585CDE",
   },
-  //일반 버튼
+
   ButBasic: {
+    //일반 버튼
     borderRadius: 10, //테투리 설정
     margin: 2, //버튼 사이 간격
     marginHorizontal: 15, //버튼 폭
@@ -443,14 +453,27 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  buttonFont: {
-    //주사위 버튼
+
+  relButFontT: {
+    //관계 버튼 활성화
     fontSize: 17,
     color: "snow",
   },
 
-  buttonFont2: {
-    //일반 버튼
+  relButFontF: {
+    //관계 버튼 비활성화
+    fontSize: 17,
+    color: "snow",
+  },
+
+  fateButFont: {
+    //주사위 버튼 폰트
+    fontSize: 17,
+    color: "snow",
+  },
+
+  basicButFont: {
+    //일반 버튼 폰트
     fontSize: 17,
     color: "#bbb",
   },
