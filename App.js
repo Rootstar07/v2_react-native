@@ -12,9 +12,13 @@ import Switch from "expo-dark-mode-switch";
 import { AlwaysOpen } from "./AlwaysOpen.js";
 import Toast from "react-native-fast-toast";
 
+//아이콘
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 //노랑 경고창 무시
 import { LogBox } from "react-native";
 import { color } from "react-native-reanimated";
+import { setStatusBarNetworkActivityIndicatorVisible } from "expo-status-bar";
 LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
@@ -134,7 +138,14 @@ export default function App() {
   const manageModalrel = (isrel) => {
     if (isrel[0] === true) {
       makeNewModalList(isrel[1], isrel[2]);
-    } else {
+
+      if (isrel[2] > 0) {
+        toast.show(ModalList[isrel[1]].name + "과의 친밀도가 늘었어요.");
+      } else if (isrel[2] < 0) {
+        toast.show(ModalList[isrel[1]].name + "과 친밀도가 줄었어요.");
+      } else {
+        toast.show(ModalList[isrel[1]].name + "가 관계도에 추가되었어요.");
+      }
     }
   };
 
@@ -222,9 +233,12 @@ export default function App() {
                   name.isFate,
                   name.leaveToFate,
                   name.text
-                );
+                ),
+                  toast.show("선택지가 열렸어요", {
+                    style: { backgroundColor: "#61Bfad" },
+                  });
               } else {
-                toast.show("관계도가 부족해요", {
+                toast.show("친밀도가 부족해요", {
                   style: { backgroundColor: "#e54b4b" },
                 });
               }
@@ -254,6 +268,20 @@ export default function App() {
                 : styles.basicButFont,
             ]}
           >
+            <MaterialCommunityIcons
+              name={[
+                name.RelBut[0] === true
+                  ? rellist[name.RelBut[1]].value > name.RelBut[2]
+                    ? "lock-open-variant"
+                    : "lock"
+                  : name.isFate == 1
+                  ? "dice-multiple-outline"
+                  : "arrow-right",
+              ]}
+              size={22}
+              color="snow"
+            />
+            {`  `}
             {name.text}
           </Text>
         </TouchableOpacity>
@@ -296,7 +324,7 @@ export default function App() {
     </TouchableOpacity>,
   ]);
 
-  const [modalrellist, setModalRelList] = useState([<Text>Hello</Text>]);
+  const [modalrellist, setModalRelList] = useState([]);
 
   const [downtext, setDownText] = useState([CrossRoad[0].text]);
 
@@ -406,11 +434,11 @@ const styles = StyleSheet.create({
     borderRadius: 10, //테투리 설정
     margin: 2, //버튼 사이 간격
     marginHorizontal: 15, //버튼 폭
-    paddingHorizontal: 30, //버튼 내부 수평
+    paddingHorizontal: 15, //버튼 내부 수평
     paddingVertical: 12, //버튼 내부 수직
     borderWidth: 3,
-    borderColor: "#61Bfad",
-    backgroundColor: "#61Bfad",
+    borderColor: "rgba(97, 191, 173, 1)",
+    backgroundColor: "rgba(97, 191, 173, 1)",
   },
 
   ButRelF: {
@@ -418,7 +446,7 @@ const styles = StyleSheet.create({
     borderRadius: 10, //테투리 설정
     margin: 2, //버튼 사이 간격
     marginHorizontal: 15, //버튼 폭
-    paddingHorizontal: 30, //버튼 내부 수평
+    paddingHorizontal: 15, //버튼 내부 수평
     paddingVertical: 12, //버튼 내부 수직
     borderWidth: 3,
     borderColor: "#e54b4b",
@@ -431,7 +459,7 @@ const styles = StyleSheet.create({
     borderRadius: 10, //테투리 설정
     margin: 2, //버튼 사이 간격
     marginHorizontal: 15, //버튼 폭
-    paddingHorizontal: 30, //버튼 내부 수평
+    paddingHorizontal: 15, //버튼 내부 수평
     paddingVertical: 12, //버튼 내부 수직
     borderWidth: 3,
     borderColor: "#585CDE",
@@ -443,11 +471,11 @@ const styles = StyleSheet.create({
     borderRadius: 10, //테투리 설정
     margin: 2, //버튼 사이 간격
     marginHorizontal: 15, //버튼 폭
-    paddingHorizontal: 30, //버튼 내부 수평
+    paddingHorizontal: 15, //버튼 내부 수평
     paddingVertical: 12, //버튼 내부 수직
     borderWidth: 3,
-    borderColor: "#282825",
-    backgroundColor: "#282825",
+    borderColor: "rgba(40,40,37,1)",
+    backgroundColor: "rgba(40,40,37,1)",
   },
   startbutton: {
     alignItems: "center",
