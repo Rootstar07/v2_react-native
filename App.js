@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Button,
+  AsyncStorage,
 } from "react-native";
 import data from "./nodesjson.json";
 import Switch from "expo-dark-mode-switch";
@@ -99,7 +100,7 @@ export default function App() {
   const [HP, setHP] = useState(10);
   const [Psy, setPsy] = useState(10);
   const [Bullet, setBullet] = useState(0);
-  const [count, setCount] = useState(0);
+  const [id, setID] = useState();
 
   //다크모드 버튼
   const [value, setValue] = React.useState(true);
@@ -111,6 +112,26 @@ export default function App() {
   const [daynightmodaltext, setDayNightModalText] = useState("#bbb");
 
   const scrollViewRef = useRef();
+
+  const storeData = async () => {
+    try {
+      await AsyncStorage.setItem("@MySuperStore:key", "I like to save it2.");
+    } catch (error) {
+      // Error saving data
+    }
+  };
+
+  const retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("@MySuperStore:key");
+      if (value !== null) {
+        // We have data!!
+        alert(value);
+      }
+    } catch (error) {
+      // Error retrieving data
+    }
+  };
 
   const StartGame = () => {
     SetButtonList2(
@@ -188,6 +209,7 @@ export default function App() {
   };
 
   const onSetPage = (a, isfate, chosenText) => {
+    setID("hello");
     if (isfate == 1) {
       feedback = `당신은 ${i}의 피해를 입었습니다...`;
     } else if (isfate == 0) {
@@ -326,10 +348,6 @@ export default function App() {
     </TouchableOpacity>,
   ]);
 
-  const countmanager = () => {
-    setCount(count + 1);
-  };
-
   const [modalrellist, setModalRelList] = useState([]);
 
   const [downtext, setDownText] = useState([CrossRoad[0].text]);
@@ -370,7 +388,7 @@ export default function App() {
             }}
           >
             {toptext}
-            {count}
+            {id}
           </Text>
         </View>
         <View style={styles.textbox}>
@@ -383,7 +401,9 @@ export default function App() {
             >
               {downtext}
             </Text>
-            <Button title={"123123"} onPress={countmanager}></Button>
+
+            <Button title={"저장"} onPress={storeData}></Button>
+            <Button title={"불러오기"} onPress={retrieveData}></Button>
             <Text>{taleSpacing}</Text>
           </ScrollView>
         </View>
