@@ -62,7 +62,7 @@
           "nextID": 1,
           "isFate": false,
           "setUI": {
-            "setHP": 0,
+            "setHP": -1,
             "setPsy": 0,
             "setBullet": 0
           },

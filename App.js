@@ -113,15 +113,15 @@ export default function App() {
 
   const scrollViewRef = useRef();
 
-  let UID123_object = {
-    name: 'Chris2',
-    age: 30,
-    traits: { hair: 'brown', eyes: 'brown' },
+  let saveData = {
+    nowID: 0,
+    ui: { hp: 10, mp: 10, bullet: 0 },
+    relsave: true
   };
 
   const save = async () => {
     try {
-      await AsyncStorage.setItem("CurrnetID:key", "123"); //string 말고 다른 값을 저장해야한다.
+      await AsyncStorage.setItem("CurrnetID:key", "123");
     } catch (error) {
       // Error saving data
     }
@@ -140,10 +140,10 @@ export default function App() {
 
   const StartGame = () => {
     //배열을 저장
-    AsyncStorage.setItem('UID123', JSON.stringify(UID123_object))
+    AsyncStorage.setItem('UID123', JSON.stringify(saveData))
 
     SetButtonList2(
-      CrossRoad[0].options.map((
+      CrossRoad[saveData.nowID].options.map((
         name //name이 TextNodes[0].options가 되는 기적!
       ) => (
         <TouchableOpacity
@@ -226,6 +226,7 @@ export default function App() {
     }
     changedstory =
       changedstory +
+      spacing +
       spacing +
       "-> " +
       chosenText +
