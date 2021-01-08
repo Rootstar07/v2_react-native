@@ -113,27 +113,35 @@ export default function App() {
 
   const scrollViewRef = useRef();
 
-  const storeData = async () => {
+  let UID123_object = {
+    name: 'Chris2',
+    age: 30,
+    traits: { hair: 'brown', eyes: 'brown' },
+  };
+
+  const save = async () => {
     try {
-      await AsyncStorage.setItem("@MySuperStore:key", "I like to save it2.");
+      await AsyncStorage.setItem("CurrnetID:key", "123"); //string 말고 다른 값을 저장해야한다.
     } catch (error) {
       // Error saving data
     }
   };
 
-  const retrieveData = async () => {
+  const load = async () => {
     try {
-      const value = await AsyncStorage.getItem("@MySuperStore:key");
+      const value = await AsyncStorage.getItem("UID123");
       if (value !== null) {
-        // We have data!!
-        alert(value);
-      }
+        alert(value)
+      };
     } catch (error) {
       // Error retrieving data
     }
   };
 
   const StartGame = () => {
+    //배열을 저장
+    AsyncStorage.setItem('UID123', JSON.stringify(UID123_object))
+
     SetButtonList2(
       CrossRoad[0].options.map((
         name //name이 TextNodes[0].options가 되는 기적!
@@ -209,7 +217,7 @@ export default function App() {
   };
 
   const onSetPage = (a, isfate, chosenText) => {
-    setID("hello");
+
     if (isfate == 1) {
       feedback = `당신은 ${i}의 피해를 입었습니다...`;
     } else if (isfate == 0) {
@@ -243,8 +251,8 @@ export default function App() {
                 ? styles.ButRelT
                 : styles.ButRelF //세부 판정: 가능할때 불가능할때 색 변화
               : name.isFate == true
-              ? styles.ButFate
-              : styles.ButBasic,
+                ? styles.ButFate
+                : styles.ButBasic,
           ]}
           key={name.buttonID}
           onPress={() => {
@@ -288,8 +296,8 @@ export default function App() {
                   ? styles.relButFontT
                   : styles.relButFontF
                 : name.isFate == 1
-                ? styles.fateButFont
-                : styles.basicButFont,
+                  ? styles.fateButFont
+                  : styles.basicButFont,
             ]}
           >
             <MaterialCommunityIcons
@@ -299,8 +307,8 @@ export default function App() {
                     ? "lock-open-variant"
                     : "lock"
                   : name.isFate == 1
-                  ? "dice-multiple-outline"
-                  : "arrow-right",
+                    ? "dice-multiple-outline"
+                    : "arrow-right",
               ]}
               size={22}
               color="snow"
@@ -402,8 +410,8 @@ export default function App() {
               {downtext}
             </Text>
 
-            <Button title={"저장"} onPress={storeData}></Button>
-            <Button title={"불러오기"} onPress={retrieveData}></Button>
+            <Button title={"저장"} onPress={save}></Button>
+            <Button title={"불러오기"} onPress={load}></Button>
             <Text>{taleSpacing}</Text>
           </ScrollView>
         </View>

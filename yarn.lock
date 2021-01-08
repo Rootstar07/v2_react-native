@@ -5128,7 +5128,7 @@ react-native-fast-toast@2.2.0:
   resolved "https://registry.yarnpkg.com/react-native-fast-toast/-/react-native-fast-toast-2.2.0.tgz#a94100180d3fd4f91499970e0a42886dfee4351e"
   integrity sha512-L9eVIC2LtkO60oRl/A3r02BYq0NAFgostXFxhkZCWhWFlBbIPmsIel/xZsawjbdB8lK/c8oUjoPkt9TDAqyOnw==
 
-react-native-gesture-handler@1.9.0:
+react-native-gesture-handler@^1.9.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.9.0.tgz#e441b1c0277c3fd4ca3e5c58fdd681e2f0ceddf0"
   integrity sha512-fkkNeWDBzDdwDxDcxtYbrb9T1g0PLgT1AxBs2iO/p7uEbDbC6mIoL/NzuOnKNEBHcd0lpLoJuNmIfdmucEON5g==

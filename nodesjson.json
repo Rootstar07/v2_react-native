@@ -1,166 +1,246 @@
-{ 
-
+{
   "list": [
     {
       "name": "이지은",
       "ID": 0,
-      "step": ["무심함", "공격적", "가족"],
+      "step": [
+        "무심함",
+        "공격적",
+        "가족"
+      ],
       "maxStep": 3
     },
     {
       "name": "김태형",
       "ID": 1,
-      "step": ["무심함", "공격적", "가족"],
+      "step": [
+        "무심함",
+        "공격적",
+        "가족"
+      ],
       "maxStep": 3
     },
     {
       "name": "박보영",
       "ID": 2,
-      "step": ["무심함", "공격적", "가족"],
+      "step": [
+        "무심함",
+        "공격적",
+        "가족"
+      ],
       "maxStep": 3
     }
   ],
-  
   "nodesjson": [
     {
       "title": "새벽",
       "id": 0,
-      "text":
-        "당신은 알 수 없는 서늘한 감각에 눈을 뜹니다. 보이는 것은 희미한 나무 천장입니다. 문밖에 동생이 나간 흔적이 있습니다.",
-      "rel": [true, 0 , 1],
- 
+      "text": "당신은 알 수 없는 서늘한 감각에 눈을 뜹니다. 보이는 것은 희미한 나무 천장입니다. 문밖에 동생이 나간 흔적이 있습니다.",
+      "rel": [
+        true,
+        0,
+        1
+      ],
       "options": [
         {
           "buttonID": 1,
           "text": "동생을 찾는다.",
           "nextID": 1,
           "isFate": true,
-          "range":[-2, 0],
-          "leaveToFate" : 1,
-          "RelBut": [false]
+          "range": [
+            -2,
+            0
+          ],
+          "leaveToFate": 1,
+          "RelBut": [
+            false
+          ]
         },
         {
           "buttonID": 2,
           "text": "다시 잔다.",
           "nextID": 1,
           "isFate": false,
-          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0},
-          "RelBut": [false]
+          "setUI": {
+            "setHP": 0,
+            "setPsy": 0,
+            "setBullet": 0
+          },
+          "RelBut": [
+            false
+          ]
         },
         {
           "buttonID": 3,
           "text": "상황을 지켜본다.",
           "nextID": 1,
           "isFate": false,
-          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0},
-          "RelBut": [false]
-          
+          "setUI": {
+            "setHP": 0,
+            "setPsy": 0,
+            "setBullet": 0
+          },
+          "RelBut": [
+            false
+          ]
         }
-        
       ]
     },
     {
       "title": "소녀",
       "id": 1,
-      "text":
-        "자신을 이지은이라 말한 소녀는 조용히 내 눈을 바라보았다.",
-        "rel": [true, 0 , 0],
- 
-         
+      "text": "자신을 이지은이라 말한 소녀는 조용히 내 눈을 바라보았다.",
+      "rel": [
+        true,
+        0,
+        0
+      ],
       "options": [
         {
           "buttonID": 1,
           "text": "그들을 위협한다.",
           "nextID": 2,
           "isFate": false,
-          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0},
-          "RelBut": [false]
+          "setUI": {
+            "setHP": 0,
+            "setPsy": 0,
+            "setBullet": 0
+          },
+          "RelBut": [
+            false
+          ]
         },
         {
           "buttonID": 2,
           "text": "그들을 말을 들어본다.",
           "nextID": 2,
           "isFate": false,
-          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0},
-          "RelBut": [false]
+          "setUI": {
+            "setHP": 0,
+            "setPsy": 0,
+            "setBullet": 0
+          },
+          "RelBut": [
+            false
+          ]
         },
         {
           "buttonID": 3,
           "text": "눈치를 보며 주변의 무기를 찾는다.",
           "nextID": 2,
           "isFate": false,
-          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0},
-          "RelBut": [false]
+          "setUI": {
+            "setHP": 0,
+            "setPsy": 0,
+            "setBullet": 0
+          },
+          "RelBut": [
+            false
+          ]
         }
       ]
     },
     {
       "title": "Cien años de soledad",
       "id": 2,
-      "text":
-        "'살려주시오' 그들은 당신에게 말합니다.",
-        "rel": [true, 2 , 1],
-       
+      "text": "'살려주시오' 그들은 당신에게 말합니다.",
+      "rel": [
+        true,
+        2,
+        1
+      ],
       "options": [
         {
           "text": "그들에게 먹을 것을 내어 준다.",
           "nextID": 3,
           "isFate": false,
-          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0},
-          "RelBut": [false]
+          "setUI": {
+            "setHP": 0,
+            "setPsy": 0,
+            "setBullet": 0
+          },
+          "RelBut": [
+            false
+          ]
         },
         {
           "text": "그들을 내쫒는다.",
           "nextID": 3,
           "isFate": true,
-          "range":[-2, 0],
-          "leaveToFate" : 2,
-          "RelBut": [false]
+          "range": [
+            -2,
+            0
+          ],
+          "leaveToFate": 2,
+          "RelBut": [
+            false
+          ]
         },
         {
           "text": "말을 좀 더 들어본다.",
           "nextID": 3,
           "isFate": true,
-          "range":[0, 3],
-          "leaveToFate" : 3,
-          "RelBut": [false]
+          "range": [
+            0,
+            3
+          ],
+          "leaveToFate": 3,
+          "RelBut": [
+            false
+          ]
         }
       ]
     },
     {
       "title": "선택",
       "id": 3,
-      "text":
-        "관계가 있다면 선택 가능",
-        "rel": [false],
-       
+      "text": "관계가 있다면 선택 가능",
+      "rel": [
+        false
+      ],
       "options": [
         {
           "text": "관계 선택지",
           "nextID": 0,
           "isFate": false,
-          "setUI": {"setHP": 0, "setPsy": 0, "setBullet": 0},
-          "RelBut": [true, 0, 2]
+          "setUI": {
+            "setHP": 0,
+            "setPsy": 0,
+            "setBullet": 0
+          },
+          "RelBut": [
+            true,
+            0,
+            2
+          ]
         },
         {
           "text": "그들을 내쫒는다.",
           "nextID": 0,
           "isFate": true,
-          "range":[-2, 0],
-          "leaveToFate" : 2,
-          "RelBut": [false]
+          "range": [
+            -2,
+            0
+          ],
+          "leaveToFate": 2,
+          "RelBut": [
+            false
+          ]
         },
         {
           "text": "말을 좀 더 들어본다.",
           "nextID": 0,
           "isFate": true,
-          "range":[0, 3],
-          "leaveToFate" : 3,
-          "RelBut": [false]
+          "range": [
+            0,
+            3
+          ],
+          "leaveToFate": 3,
+          "RelBut": [
+            false
+          ]
         }
       ]
     }
   ]
-
-
-  }
+}
