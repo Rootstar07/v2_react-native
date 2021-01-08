@@ -21,6 +21,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { LogBox } from "react-native";
 import { color } from "react-native-reanimated";
 import { setStatusBarNetworkActivityIndicatorVisible } from "expo-status-bar";
+import { useEffect } from "react";
 LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
@@ -95,12 +96,12 @@ const rellist = [
 ];
 
 export default function App() {
-  const [toptext, setTopText] = useState(CrossRoad[0].title);
+
   const [PressedButtonID, setPressedButtonID] = useState(0);
   const [HP, setHP] = useState(10);
   const [Psy, setPsy] = useState(10);
   const [Bullet, setBullet] = useState(0);
-  const [id, setID] = useState();
+  const [id, setID] = useState(0);
 
   //다크모드 버튼
   const [value, setValue] = React.useState(true);
@@ -114,36 +115,42 @@ export default function App() {
   const scrollViewRef = useRef();
 
   let saveData = {
-    nowID: 0,
-    ui: { hp: 10, mp: 10, bullet: 0 },
+    nowID: id,
+    ui: { hp: HP, mp: 10, bullet: 0 },
     relsave: true
   };
 
+  //현재 문제: id가 usestate라서 저장을 해도 다시 0으로 초기화된다
+  //해결 방법: load를 누르면 저장된 id가 반영되도록, 지금은 알림밖에 안한다. (나중에는 useEffect로 자동으로 바뀌게)
+
+  //현재 문제: useEffect와 load를 통해 id값은 바뀌지만 그 id에 맞는 선택지가 뜨지 않음
+  //예상 문제: id는 바뀐거 맞는데 함수를 안불러서 그냥 있다가 바뀌는게 아닐까
+
+
   const save = async () => {
-    try {
-      await AsyncStorage.setItem("CurrnetID:key", "123");
-    } catch (error) {
-      // Error saving data
-    }
+    AsyncStorage.setItem('UID123', JSON.stringify(saveData)) //string으로 감싸기
   };
 
   const load = async () => {
     try {
       const value = await AsyncStorage.getItem("UID123");
       if (value !== null) {
-        alert(value)
+        var testid = JSON.parse(value) //json으로 풀기
+        setID(testid.nowID)
+        //alert(testid.nowID)
+        setTopText(CrossRoad[testid.nowID].title)
       };
     } catch (error) {
-      // Error retrieving data
     }
   };
 
+  useEffect(() => { load() }, [])
+
   const StartGame = () => {
-    //배열을 저장
-    AsyncStorage.setItem('UID123', JSON.stringify(saveData))
 
     SetButtonList2(
-      CrossRoad[saveData.nowID].options.map((
+      CrossRoad[0].options.map((
+        //CrossRoad[i]에서 i를 바꾸어도 변화가 없음 <- 이게 문제
         name //name이 TextNodes[0].options가 되는 기적!
       ) => (
         <TouchableOpacity
@@ -156,7 +163,6 @@ export default function App() {
           <Text style={styles.fateButFont}>{name.text}</Text>
         </TouchableOpacity>
       ))
-      //12.26 버튼이 문제가 아니라 SetPressedButtonID(여기)가 문제였다. 왜일까?
     );
   };
 
@@ -217,6 +223,7 @@ export default function App() {
   };
 
   const onSetPage = (a, isfate, chosenText) => {
+    setID(a);
 
     if (isfate == 1) {
       feedback = `당신은 ${i}의 피해를 입었습니다...`;
@@ -322,6 +329,7 @@ export default function App() {
     );
   };
 
+  /////////////////////////
   const NeXtNode = (nextID, nowID, UIdata, isfate, leaveToFate, chosenText) => {
     if (isfate == 0) {
       setPressedButtonID(nowID);
@@ -359,7 +367,8 @@ export default function App() {
 
   const [modalrellist, setModalRelList] = useState([]);
 
-  const [downtext, setDownText] = useState([CrossRoad[0].text]);
+  const [downtext, setDownText] = useState([CrossRoad[id].text]);
+  const [toptext, setTopText] = useState(CrossRoad[id].title);
 
   const adminDayNight = (value) => {
     setValue(value);
