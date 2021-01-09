@@ -57,7 +57,6 @@ var taleSpacing = `
 `;
 var i = 0;
 var feedback = "";
-var reflist = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 const rellist = [
   {
@@ -108,6 +107,8 @@ export default function App() {
   const [cpsy2, cpsy] = useState(0)
   const [cbullet2, cbullet] = useState(0)
 
+  const [relsaved, setRelSaved] = useState([])
+
 
   //다크모드 버튼
   const [value, setValue] = React.useState(true);
@@ -129,7 +130,8 @@ export default function App() {
     nowfate: 0,
     ui: { hp: HP, psy: Psy, bullet: Bullet },
     changedui: { chp: chp2, cpsy: cpsy2, cbullet: cbullet2 },
-    relsave: true
+    reflist: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    relsave: relsaved
   };
 
   const save = async () => {
@@ -150,6 +152,8 @@ export default function App() {
         changedHP = testid.changedui.chp
         changedPsy = testid.changedui.cpsy
         changedBullet = testid.changedui.cbullet //ui값 전달
+
+        newModalList = testid.relsave
 
       };
     } catch (error) {
@@ -203,11 +207,16 @@ export default function App() {
     }
   };
 
+  //인물 리스트 제작
   const makeNewModalList = (ID, value) => {
     newModalList = [
       ...newModalList,
       { name: ModalList[ID].name, value: value, key: ID },
     ];
+
+    setRelSaved(newModalList)
+
+    var reflist = saveData.reflist
 
     if (reflist[ID] < ModalList[ID].maxStep) {
       reflist[ID] = reflist[ID] + value;
@@ -219,6 +228,7 @@ export default function App() {
       newModalList.reduce((m, t) => m.set(t.key, t), new Map()).values()
     );
 
+    //위의 리스트를 표현
     setModalRelList(
       uniqueList.map((list) => (
         <View>
@@ -346,7 +356,6 @@ export default function App() {
     );
   };
 
-  /////////////////////////
   const NeXtNode = (nextID, nowID, UIdata, isfate, leaveToFate, chosenText) => {
     if (isfate == 0) {
       setPressedButtonID(nowID);
