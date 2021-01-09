@@ -103,6 +103,11 @@ export default function App() {
   const [id, setID] = useState(0);
   const [fates, setFates] = useState(0); //mission : i값도 같이 변화시키면 사용가능
 
+  //changed값을 saveData에 전달
+  const [chp2, chp] = useState(0)
+  const [cpsy2, cpsy] = useState(0)
+  const [cbullet2, cbullet] = useState(0)
+
 
   //다크모드 버튼
   const [value, setValue] = React.useState(true);
@@ -119,20 +124,13 @@ export default function App() {
   var changedPsy = 0;
   var changedBullet = 0;
 
-  let saveData = {
+  const saveData = {
     nowID: id,
     nowfate: 0,
     ui: { hp: HP, psy: Psy, bullet: Bullet },
-    changedui: { chp: 0, cpsy: 0, cbullet: 0 },
+    changedui: { chp: chp2, cpsy: cpsy2, cbullet: cbullet2 },
     relsave: true
   };
-
-  //현재 문제: id가 usestate라서 저장을 해도 다시 0으로 초기화된다
-  //해결 방법: load를 누르면 저장된 id가 반영되도록, 지금은 알림밖에 안한다. (나중에는 useEffect로 자동으로 바뀌게)
-
-  //현재 문제: useEffect와 load를 통해 id값은 바뀌지만 그 id에 맞는 선택지가 뜨지 않음
-  //예상 문제: id는 바뀐거 맞는데 함수를 안불러서 그냥 있다가 바뀌는게 아닐까
-
 
   const save = async () => {
     AsyncStorage.setItem('UID123', JSON.stringify(saveData)) //string으로 감싸기
@@ -151,12 +149,16 @@ export default function App() {
 
         changedHP = testid.changedui.chp
         changedPsy = testid.changedui.cpsy
-        changedBullet = testid.changedui.cbullet
+        changedBullet = testid.changedui.cbullet //ui값 전달
 
       };
     } catch (error) {
     }
   };
+
+  const clear = async () => {
+    AsyncStorage.clear()
+  }
 
   useEffect(() => { load() }, [])
 
@@ -241,7 +243,7 @@ export default function App() {
     setID(a);
 
     if (isfate == 1) {
-      feedback = `당신은 ${i}의 피해를 입었습니다...`;
+      feedback = `당신은 ${i}의 피해를 입었습니다...`; //mission: 피해의 종류 상세하게
     } else if (isfate == 0) {
       feedback = "";
       i = "";
@@ -263,8 +265,8 @@ export default function App() {
     manageModalrel(CrossRoad[a].rel);
 
     scrollViewRef.current.scrollToEnd({ animated: true }); //스크롤 관리
-    //버튼생성
 
+    //버튼생성
     SetButtonList2(
       CrossRoad[a].options.map((name) => (
         <TouchableOpacity
@@ -365,18 +367,15 @@ export default function App() {
 
   const onSetUI = (hp, psy, bullet) => {
 
-    saveData.changedui.chp = saveData.changedui.chp + hp
-    saveData.changedui.cpsy = saveData.changedui.cpsy + psy
-
     changedHP = changedHP + hp;
     changedPsy = changedPsy + psy;
     changedBullet = changedBullet + bullet;
 
-    saveData.changedui.chp = changedHP
-    saveData.changedui.psy = changedPsy
-    saveData.changedui.psy = changedBullet
+    chp(changedHP)
+    cpsy(changedPsy)
+    cbullet(changedBullet)
 
-    setHP(HP + changedHP)
+    setHP(HP + changedHP);
     setPsy(Psy + changedPsy);
     setBullet(Bullet + changedBullet);
   };
@@ -447,6 +446,7 @@ export default function App() {
 
             <Button title={"저장"} onPress={save}></Button>
             <Button title={"불러오기"} onPress={load}></Button>
+            <Button title={"주의: 초기화"} onPress={clear}></Button>
             <Text>{taleSpacing}</Text>
           </ScrollView>
         </View>
