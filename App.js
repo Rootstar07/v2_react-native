@@ -22,15 +22,14 @@ import { LogBox } from "react-native";
 import { color } from "react-native-reanimated";
 import { setStatusBarNetworkActivityIndicatorVisible } from "expo-status-bar";
 import { useEffect } from "react";
+import { checkPropTypes } from "prop-types";
 LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 var CrossRoad = data.nodesjson;
 var ModalList = data.list;
 
-var changedHP = 0;
-var changedPsy = 0;
-var changedBullet = 0;
+
 var changedstory = "";
 var newModalList = [];
 
@@ -96,12 +95,14 @@ const rellist = [
 ];
 
 export default function App() {
+
   const [PressedButtonID, setPressedButtonID] = useState(0);
   const [HP, setHP] = useState(10);
   const [Psy, setPsy] = useState(10);
   const [Bullet, setBullet] = useState(0);
   const [id, setID] = useState(0);
-  const [fates, setFates] = useState(0);
+  const [fates, setFates] = useState(0); //mission : i값도 같이 변화시키면 사용가능
+
 
   //다크모드 버튼
   const [value, setValue] = React.useState(true);
@@ -114,11 +115,16 @@ export default function App() {
 
   const scrollViewRef = useRef();
 
+  var changedHP = 0;
+  var changedPsy = 0;
+  var changedBullet = 0;
+
   let saveData = {
     nowID: id,
     nowfate: 0,
-    ui: { hp: HP, mp: 10, bullet: 0 },
-    relsave: true,
+    ui: { hp: HP, psy: Psy, bullet: Bullet },
+    changedui: { chp: 0, cpsy: 0, cbullet: 0 },
+    relsave: true
   };
 
   //현재 문제: id가 usestate라서 저장을 해도 다시 0으로 초기화된다
@@ -127,31 +133,39 @@ export default function App() {
   //현재 문제: useEffect와 load를 통해 id값은 바뀌지만 그 id에 맞는 선택지가 뜨지 않음
   //예상 문제: id는 바뀐거 맞는데 함수를 안불러서 그냥 있다가 바뀌는게 아닐까
 
+
   const save = async () => {
-    AsyncStorage.setItem("UID123", JSON.stringify(saveData)); //string으로 감싸기
+    AsyncStorage.setItem('UID123', JSON.stringify(saveData)) //string으로 감싸기
   };
 
   const load = async () => {
     try {
       const value = await AsyncStorage.getItem("UID123");
       if (value !== null) {
-        var testid = JSON.parse(value); //json으로 풀기
-        setID(testid.nowID);
-        setFates(testid.nowfate);
-        //alert(testid.nowID)
-        onSetPage(testid.nowID, testid.nowfate, "다시 시작");
-      }
-    } catch (error) {}
+        var testid = JSON.parse(value) //json으로 풀기
+        onSetPage(testid.nowID, testid.nowfate, "다시 시작"); //제목, 내용, 버튼 변화
+
+        setHP(testid.ui.hp)
+        setPsy(testid.ui.psy)
+        setBullet(testid.ui.bullet)
+
+        changedHP = testid.changedui.chp
+        changedPsy = testid.changedui.cpsy
+        changedBullet = testid.changedui.cbullet
+
+      };
+    } catch (error) {
+    }
   };
 
-  useEffect(() => {
-    load();
-  }, []);
+  useEffect(() => { load() }, [])
+
 
   const StartGame = () => {
+
     SetButtonList2(
-      CrossRoad[1].options.map((
-        //start 버튼을 눌렀을때 버튼 설정
+      CrossRoad[0].options.map((
+        //CrossRoad[i]에서 i를 바꾸면 버튼만 바뀜
         name //name이 TextNodes[0].options가 되는 기적!
       ) => (
         <TouchableOpacity
@@ -223,10 +237,8 @@ export default function App() {
     );
   };
 
-  const onSetPage = (nextID, isfate, chosenText) => {
-    setID(nextID); //saveData에 올려놓음 -> save 버튼으로 저장 -> load 로 불러오기 (제목, 내용, 버튼)
-    //setFates(isfate); -> i값을 받을 필요가 있음
-    //ui, 관계도 필요, 초기화 버튼 필요
+  const onSetPage = (a, isfate, chosenText) => {
+    setID(a);
 
     if (isfate == 1) {
       feedback = `당신은 ${i}의 피해를 입었습니다...`;
@@ -241,20 +253,20 @@ export default function App() {
       "-> " +
       chosenText +
       spacing +
-      CrossRoad[nextID].text +
+      CrossRoad[a].text +
       spacing +
       feedback +
       spacing +
       spacing;
-    setTopText(CrossRoad[nextID].title);
+    setTopText(CrossRoad[a].title);
     setDownText(changedstory);
-    manageModalrel(CrossRoad[nextID].rel);
+    manageModalrel(CrossRoad[a].rel);
 
     scrollViewRef.current.scrollToEnd({ animated: true }); //스크롤 관리
     //버튼생성
 
     SetButtonList2(
-      CrossRoad[nextID].options.map((name) => (
+      CrossRoad[a].options.map((name) => (
         <TouchableOpacity
           style={[
             name.RelBut[0] == true
@@ -262,8 +274,8 @@ export default function App() {
                 ? styles.ButRelT
                 : styles.ButRelF //세부 판정: 가능할때 불가능할때 색 변화
               : name.isFate == true
-              ? styles.ButFate
-              : styles.ButBasic,
+                ? styles.ButFate
+                : styles.ButBasic,
           ]}
           key={name.buttonID}
           onPress={() => {
@@ -307,8 +319,8 @@ export default function App() {
                   ? styles.relButFontT
                   : styles.relButFontF
                 : name.isFate == 1
-                ? styles.fateButFont
-                : styles.basicButFont,
+                  ? styles.fateButFont
+                  : styles.basicButFont,
             ]}
           >
             <MaterialCommunityIcons
@@ -318,8 +330,8 @@ export default function App() {
                     ? "lock-open-variant"
                     : "lock"
                   : name.isFate == 1
-                  ? "dice-multiple-outline"
-                  : "arrow-right",
+                    ? "dice-multiple-outline"
+                    : "arrow-right",
               ]}
               size={22}
               color="snow"
@@ -332,12 +344,15 @@ export default function App() {
     );
   };
 
+  /////////////////////////
   const NeXtNode = (nextID, nowID, UIdata, isfate, leaveToFate, chosenText) => {
-    setPressedButtonID(nowID);
-    onSetPage(nextID, isfate, chosenText);
     if (isfate == 0) {
+      setPressedButtonID(nowID);
+      onSetPage(nextID, isfate, chosenText);
       onSetUI(UIdata.setHP, UIdata.setPsy, UIdata.setBullet);
     } else if (isfate == 1) {
+      setPressedButtonID(nowID);
+      onSetPage(nextID, isfate, chosenText);
       if (leaveToFate == 1) {
         onSetUI(i, 0, 0);
       } else if (leaveToFate == 2) {
@@ -348,15 +363,24 @@ export default function App() {
     }
   };
 
-  ///!!///
   const onSetUI = (hp, psy, bullet) => {
+
+    saveData.changedui.chp = saveData.changedui.chp + hp
+    saveData.changedui.cpsy = saveData.changedui.cpsy + psy
+
     changedHP = changedHP + hp;
     changedPsy = changedPsy + psy;
     changedBullet = changedBullet + bullet;
-    var nowHp = setHP(HP + changedHP);
-    var nowPsy = setPsy(Psy + changedPsy);
-    var nowBullet = setBullet(Bullet + changedBullet);
+
+    saveData.changedui.chp = changedHP
+    saveData.changedui.psy = changedPsy
+    saveData.changedui.psy = changedBullet
+
+    setHP(HP + changedHP)
+    setPsy(Psy + changedPsy);
+    setBullet(Bullet + changedBullet);
   };
+
 
   const [buttonList2, SetButtonList2] = useState([
     <TouchableOpacity onPress={StartGame}>
