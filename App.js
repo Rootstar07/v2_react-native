@@ -96,12 +96,12 @@ const rellist = [
 ];
 
 export default function App() {
-
   const [PressedButtonID, setPressedButtonID] = useState(0);
   const [HP, setHP] = useState(10);
   const [Psy, setPsy] = useState(10);
   const [Bullet, setBullet] = useState(0);
   const [id, setID] = useState(0);
+  const [fates, setFates] = useState(0);
 
   //다크모드 버튼
   const [value, setValue] = React.useState(true);
@@ -116,8 +116,9 @@ export default function App() {
 
   let saveData = {
     nowID: id,
+    nowfate: 0,
     ui: { hp: HP, mp: 10, bullet: 0 },
-    relsave: true
+    relsave: true,
   };
 
   //현재 문제: id가 usestate라서 저장을 해도 다시 0으로 초기화된다
@@ -126,31 +127,31 @@ export default function App() {
   //현재 문제: useEffect와 load를 통해 id값은 바뀌지만 그 id에 맞는 선택지가 뜨지 않음
   //예상 문제: id는 바뀐거 맞는데 함수를 안불러서 그냥 있다가 바뀌는게 아닐까
 
-
   const save = async () => {
-    AsyncStorage.setItem('UID123', JSON.stringify(saveData)) //string으로 감싸기
+    AsyncStorage.setItem("UID123", JSON.stringify(saveData)); //string으로 감싸기
   };
 
   const load = async () => {
     try {
       const value = await AsyncStorage.getItem("UID123");
       if (value !== null) {
-        var testid = JSON.parse(value) //json으로 풀기
-        setID(testid.nowID)
+        var testid = JSON.parse(value); //json으로 풀기
+        setID(testid.nowID);
+        setFates(testid.nowfate);
         //alert(testid.nowID)
-        setTopText(CrossRoad[testid.nowID].title)
-      };
-    } catch (error) {
-    }
+        onSetPage(testid.nowID, testid.nowfate, "다시 시작");
+      }
+    } catch (error) {}
   };
 
-  useEffect(() => { load() }, [])
+  useEffect(() => {
+    load();
+  }, []);
 
   const StartGame = () => {
-
     SetButtonList2(
-      CrossRoad[0].options.map((
-        //CrossRoad[i]에서 i를 바꾸어도 변화가 없음 <- 이게 문제
+      CrossRoad[1].options.map((
+        //start 버튼을 눌렀을때 버튼 설정
         name //name이 TextNodes[0].options가 되는 기적!
       ) => (
         <TouchableOpacity
@@ -222,8 +223,10 @@ export default function App() {
     );
   };
 
-  const onSetPage = (a, isfate, chosenText) => {
-    setID(a);
+  const onSetPage = (nextID, isfate, chosenText) => {
+    setID(nextID); //saveData에 올려놓음 -> save 버튼으로 저장 -> load 로 불러오기 (제목, 내용, 버튼)
+    //setFates(isfate); -> i값을 받을 필요가 있음
+    //ui, 관계도 필요, 초기화 버튼 필요
 
     if (isfate == 1) {
       feedback = `당신은 ${i}의 피해를 입었습니다...`;
@@ -238,20 +241,20 @@ export default function App() {
       "-> " +
       chosenText +
       spacing +
-      CrossRoad[a].text +
+      CrossRoad[nextID].text +
       spacing +
       feedback +
       spacing +
       spacing;
-    setTopText(CrossRoad[a].title);
+    setTopText(CrossRoad[nextID].title);
     setDownText(changedstory);
-    manageModalrel(CrossRoad[a].rel);
+    manageModalrel(CrossRoad[nextID].rel);
 
     scrollViewRef.current.scrollToEnd({ animated: true }); //스크롤 관리
     //버튼생성
 
     SetButtonList2(
-      CrossRoad[a].options.map((name) => (
+      CrossRoad[nextID].options.map((name) => (
         <TouchableOpacity
           style={[
             name.RelBut[0] == true
@@ -259,8 +262,8 @@ export default function App() {
                 ? styles.ButRelT
                 : styles.ButRelF //세부 판정: 가능할때 불가능할때 색 변화
               : name.isFate == true
-                ? styles.ButFate
-                : styles.ButBasic,
+              ? styles.ButFate
+              : styles.ButBasic,
           ]}
           key={name.buttonID}
           onPress={() => {
@@ -304,8 +307,8 @@ export default function App() {
                   ? styles.relButFontT
                   : styles.relButFontF
                 : name.isFate == 1
-                  ? styles.fateButFont
-                  : styles.basicButFont,
+                ? styles.fateButFont
+                : styles.basicButFont,
             ]}
           >
             <MaterialCommunityIcons
@@ -315,8 +318,8 @@ export default function App() {
                     ? "lock-open-variant"
                     : "lock"
                   : name.isFate == 1
-                    ? "dice-multiple-outline"
-                    : "arrow-right",
+                  ? "dice-multiple-outline"
+                  : "arrow-right",
               ]}
               size={22}
               color="snow"
@@ -329,15 +332,12 @@ export default function App() {
     );
   };
 
-  /////////////////////////
   const NeXtNode = (nextID, nowID, UIdata, isfate, leaveToFate, chosenText) => {
+    setPressedButtonID(nowID);
+    onSetPage(nextID, isfate, chosenText);
     if (isfate == 0) {
-      setPressedButtonID(nowID);
-      onSetPage(nextID, isfate, chosenText);
       onSetUI(UIdata.setHP, UIdata.setPsy, UIdata.setBullet);
     } else if (isfate == 1) {
-      setPressedButtonID(nowID);
-      onSetPage(nextID, isfate, chosenText);
       if (leaveToFate == 1) {
         onSetUI(i, 0, 0);
       } else if (leaveToFate == 2) {
@@ -348,6 +348,7 @@ export default function App() {
     }
   };
 
+  ///!!///
   const onSetUI = (hp, psy, bullet) => {
     changedHP = changedHP + hp;
     changedPsy = changedPsy + psy;
