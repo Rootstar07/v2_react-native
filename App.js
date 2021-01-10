@@ -7,13 +7,12 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Button,
-  AsyncStorage,
-
 } from "react-native";
 import data from "./nodesjson.json";
 import Switch from "expo-dark-mode-switch";
 import { AlwaysOpen } from "./AlwaysOpen.js";
 import Toast from "react-native-fast-toast";
+import AsyncStorage from "@react-native-community/async-storage";
 
 //아이콘
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -23,7 +22,7 @@ import { LogBox } from "react-native";
 import { color } from "react-native-reanimated";
 import { setStatusBarNetworkActivityIndicatorVisible } from "expo-status-bar";
 import { useEffect } from "react";
-import { checkPropTypes } from "prop-types";
+import { array, checkPropTypes } from "prop-types";
 import { useSafeArea } from "react-native-safe-area-context";
 LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
@@ -106,7 +105,7 @@ export default function App() {
   const [cpsy2, cpsy] = useState(0);
   const [cbullet2, cbullet] = useState(0);
 
-  const [listhope, setlisthope] = useState([1, 2, 3]);
+  const [listhope, setlisthope] = useState([1]);
 
   //{ name: ModalList[0].name, value: 0, key: 0 }
 
@@ -119,6 +118,10 @@ export default function App() {
   const [daynightmodalmaster, setdaynightmodalmaster] = useState("#282825");
   const [daynightmodaltext, setDayNightModalText] = useState("#bbb");
 
+  const [isactor0, setaactor0] = useState(false);
+  const [isactor1, setaactor1] = useState(false);
+  const [isactor2, setaactor2] = useState(false);
+
   const scrollViewRef = useRef();
 
   var changedHP = 0;
@@ -127,15 +130,20 @@ export default function App() {
 
   var newModalList = [];
 
-
   const saveData = {
     nowID: id,
     nowfate: 0,
     ui: { hp: HP, psy: Psy, bullet: Bullet },
     changedui: { chp: chp2, cpsy: cpsy2, cbullet: cbullet2 },
     reflist: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    changedList: listhope,
+    actorlist: [
+      { name: "이지은", id: 0, is: isactor0, value: 0 },
+      { name: "김태형", id: 1, is: isactor1, value: 0 },
+      { name: "박보영", id: 2, is: isactor2, value: 0 },
+    ],
   };
+
+  //logic: rel이 true일때 해당 id가 있다면 actorlist[].is는 true
 
   const save = async () => {
     AsyncStorage.setItem("UID123", JSON.stringify(saveData)); //string으로 감싸기
@@ -156,12 +164,14 @@ export default function App() {
         changedPsy = testid.changedui.cpsy;
         changedBullet = testid.changedui.cbullet; //ui값 전달
 
-        newModalList = changedList;
-        //문제: 최근에 추가한 id와 value만 저장됌 + 이전에 관계도 변화가 없으면 생기지도 않음
-        //해결 방안: cList를 만들어서 과거내역도 처리
-        saveData.reflist = [...testid.reflist];
+        saveData.actorlist.forEach((num) => {
+          if (num.is === true) {
+            //true인 값만으로 모달 리스트 생성
+            makeNewModalList(num.id);
+          }
+        });
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   const clear = async () => {
@@ -199,8 +209,10 @@ export default function App() {
 
   const manageModalrel = (isrel) => {
     if (isrel[0] === true) {
+      //모달리스트를 만들기 위해 id와 변하는 value는 전달
       makeNewModalList(isrel[1], isrel[2]);
 
+      //토스트 알림
       if (isrel[2] > 0) {
         toast.show(ModalList[isrel[1]].name + "과의 친밀도가 늘었어요.");
       } else if (isrel[2] < 0) {
@@ -211,21 +223,28 @@ export default function App() {
     }
   };
 
-  const updatelist = () => {
-    alert("update")
-    setlisthope((arr) => [...arr, newModalList])
-
-  }
-
   //인물 리스트 제작
   const makeNewModalList = (ID, value) => {
-
     //최대값 확인
     if (saveData.reflist[ID] < ModalList[ID].maxStep) {
       saveData.reflist[ID] = saveData.reflist[ID] + value;
       rellist[ID].value = saveData.reflist[ID]; //없애고 싶지만 아직 이게 있어야 버튼 수문장 가능
     }
-    newModalList = newModalList.concat({ name: ModalList[ID].name, value: saveData.reflist[ID], key: ID })
+
+    if (ID == 0) {
+      setaactor0(true);
+    } else if (ID == 1) {
+      setaactor1(true);
+    } else if (ID == 2) {
+      setaactor2(true);
+    }
+
+    newModalList = [
+      ...newModalList,
+      { name: ModalList[ID].name, value: saveData.reflist[ID], key: ID },
+    ];
+
+    saveData.changedList = [...newModalList]; //saveData로 이동 확인
 
     // 1. 오브젝트 중복제거
     let uniqueList = Array.from(
@@ -246,7 +265,7 @@ export default function App() {
               margin: 7,
             }}
           >
-            {list.name}: {list.value}
+            {list.name}
           </Text>
         </View>
       ))
@@ -290,8 +309,8 @@ export default function App() {
                 ? styles.ButRelT
                 : styles.ButRelF //세부 판정: 가능할때 불가능할때 색 변화
               : name.isFate == true
-                ? styles.ButFate
-                : styles.ButBasic,
+              ? styles.ButFate
+              : styles.ButBasic,
           ]}
           key={name.buttonID}
           onPress={() => {
@@ -335,8 +354,8 @@ export default function App() {
                   ? styles.relButFontT
                   : styles.relButFontF
                 : name.isFate == 1
-                  ? styles.fateButFont
-                  : styles.basicButFont,
+                ? styles.fateButFont
+                : styles.basicButFont,
             ]}
           >
             <MaterialCommunityIcons
@@ -346,8 +365,8 @@ export default function App() {
                     ? "lock-open-variant"
                     : "lock"
                   : name.isFate == 1
-                    ? "dice-multiple-outline"
-                    : "arrow-right",
+                  ? "dice-multiple-outline"
+                  : "arrow-right",
               ]}
               size={22}
               color="snow"
