@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Button,
   AsyncStorage,
+
 } from "react-native";
 import data from "./nodesjson.json";
 import Switch from "expo-dark-mode-switch";
@@ -23,6 +24,7 @@ import { color } from "react-native-reanimated";
 import { setStatusBarNetworkActivityIndicatorVisible } from "expo-status-bar";
 import { useEffect } from "react";
 import { checkPropTypes } from "prop-types";
+import { useSafeArea } from "react-native-safe-area-context";
 LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
@@ -104,7 +106,9 @@ export default function App() {
   const [cpsy2, cpsy] = useState(0);
   const [cbullet2, cbullet] = useState(0);
 
-  const [listhope, setlisthope] = useState();
+  const [listhope, setlisthope] = useState([1, 2, 3]);
+
+  //{ name: ModalList[0].name, value: 0, key: 0 }
 
   //다크모드 버튼
   const [value, setValue] = React.useState(true);
@@ -122,6 +126,7 @@ export default function App() {
   var changedBullet = 0;
 
   var newModalList = [];
+
 
   const saveData = {
     nowID: id,
@@ -151,12 +156,12 @@ export default function App() {
         changedPsy = testid.changedui.cpsy;
         changedBullet = testid.changedui.cbullet; //ui값 전달
 
-        newModalList = [...changedList];
-        //문제: 최근에 추가한 id와 value만 저장됌
+        newModalList = changedList;
+        //문제: 최근에 추가한 id와 value만 저장됌 + 이전에 관계도 변화가 없으면 생기지도 않음
         //해결 방안: cList를 만들어서 과거내역도 처리
         saveData.reflist = [...testid.reflist];
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const clear = async () => {
@@ -206,22 +211,21 @@ export default function App() {
     }
   };
 
+  const updatelist = () => {
+    alert("update")
+    setlisthope((arr) => [...arr, newModalList])
+
+  }
+
   //인물 리스트 제작
   const makeNewModalList = (ID, value) => {
+
     //최대값 확인
-    if (newModalList)
-      if (saveData.reflist[ID] < ModalList[ID].maxStep) {
-        saveData.reflist[ID] = saveData.reflist[ID] + value;
-        rellist[ID].value = saveData.reflist[ID]; //없애고 싶지만 아직 이게 있어야 버튼 수문장 가능
-      }
-
-    newModalList = [
-      ...newModalList,
-      { name: ModalList[ID].name, value: saveData.reflist[ID], key: ID },
-    ];
-    //예상 문제:  saveData로 의미있는 배열값이 하나만 가는거같다. spread가 이상한가
-
-    setlisthope(newModalList);
+    if (saveData.reflist[ID] < ModalList[ID].maxStep) {
+      saveData.reflist[ID] = saveData.reflist[ID] + value;
+      rellist[ID].value = saveData.reflist[ID]; //없애고 싶지만 아직 이게 있어야 버튼 수문장 가능
+    }
+    newModalList = newModalList.concat({ name: ModalList[ID].name, value: saveData.reflist[ID], key: ID })
 
     // 1. 오브젝트 중복제거
     let uniqueList = Array.from(
@@ -286,8 +290,8 @@ export default function App() {
                 ? styles.ButRelT
                 : styles.ButRelF //세부 판정: 가능할때 불가능할때 색 변화
               : name.isFate == true
-              ? styles.ButFate
-              : styles.ButBasic,
+                ? styles.ButFate
+                : styles.ButBasic,
           ]}
           key={name.buttonID}
           onPress={() => {
@@ -331,8 +335,8 @@ export default function App() {
                   ? styles.relButFontT
                   : styles.relButFontF
                 : name.isFate == 1
-                ? styles.fateButFont
-                : styles.basicButFont,
+                  ? styles.fateButFont
+                  : styles.basicButFont,
             ]}
           >
             <MaterialCommunityIcons
@@ -342,8 +346,8 @@ export default function App() {
                     ? "lock-open-variant"
                     : "lock"
                   : name.isFate == 1
-                  ? "dice-multiple-outline"
-                  : "arrow-right",
+                    ? "dice-multiple-outline"
+                    : "arrow-right",
               ]}
               size={22}
               color="snow"
