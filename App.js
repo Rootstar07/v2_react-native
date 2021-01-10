@@ -127,6 +127,7 @@ export default function App() {
   var changedHP = 0;
   var changedPsy = 0;
   var changedBullet = 0;
+  var arr2 = [];
 
   var newModalList = [];
 
@@ -164,9 +165,12 @@ export default function App() {
         changedPsy = testid.changedui.cpsy;
         changedBullet = testid.changedui.cbullet; //ui값 전달
 
-        saveData.actorlist.forEach((num) => {
+        setaactor0(testid.actorlist[0].is);
+        setaactor1(testid.actorlist[1].is);
+        setaactor2(testid.actorlist[2].is);
+
+        testid.actorlist.forEach((num) => {
           if (num.is === true) {
-            //true인 값만으로 모달 리스트 생성
             makeNewModalList(num.id);
           }
         });
@@ -209,7 +213,6 @@ export default function App() {
 
   const manageModalrel = (isrel) => {
     if (isrel[0] === true) {
-      //모달리스트를 만들기 위해 id와 변하는 value는 전달
       makeNewModalList(isrel[1], isrel[2]);
 
       //토스트 알림
@@ -226,32 +229,34 @@ export default function App() {
   //인물 리스트 제작
   const makeNewModalList = (ID, value) => {
     //최대값 확인
-    if (saveData.reflist[ID] < ModalList[ID].maxStep) {
-      saveData.reflist[ID] = saveData.reflist[ID] + value;
-      rellist[ID].value = saveData.reflist[ID]; //없애고 싶지만 아직 이게 있어야 버튼 수문장 가능
-    }
+    //if (saveData.reflist[ID] < ModalList[ID].maxStep) {
+    //  saveData.reflist[ID] = saveData.reflist[ID] + value;
+    //   rellist[ID].value = saveData.reflist[ID]; //없애고 싶지만 아직 이게 있어야 버튼 수문장 가능
+    //}
 
     if (ID == 0) {
       setaactor0(true);
+      arr2 = [...arr2, saveData.actorlist[0]];
     } else if (ID == 1) {
       setaactor1(true);
+      arr2 = [...arr2, saveData.actorlist[1]];
     } else if (ID == 2) {
       setaactor2(true);
-    }
+      arr2 = [...arr2, saveData.actorlist[2]];
+    } //id가 들어오면 해당 캐릭터의 is를 true로 변경 + load에서 true인 id를 받아옴
 
-    newModalList = [
-      ...newModalList,
-      { name: ModalList[ID].name, value: saveData.reflist[ID], key: ID },
-    ];
-
-    saveData.changedList = [...newModalList]; //saveData로 이동 확인
-
+    //{
+    //newModalList = [
+    //  ...newModalList,
+    //  { name: ModalList[ID].name, value: saveData.reflist[ID], key: ID },
+    //];
+    //saveData.changedList = [...newModalList]; //saveData로 이동 확인
     // 1. 오브젝트 중복제거
+
     let uniqueList = Array.from(
-      newModalList.reduce((m, t) => m.set(t.key, t), new Map()).values()
+      arr2.reduce((m, t) => m.set(t.id, t), new Map()).values()
     );
 
-    //위의 리스트를 표현
     setModalRelList(
       uniqueList.map((list) => (
         <View>
@@ -271,6 +276,8 @@ export default function App() {
       ))
     );
   };
+
+  //위의 리스트를 표현
 
   const onSetPage = (a, isfate, chosenText) => {
     setID(a);
