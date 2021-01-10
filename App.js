@@ -29,9 +29,7 @@ LogBox.ignoreAllLogs(); //Ignore all log notifications
 var CrossRoad = data.nodesjson;
 var ModalList = data.list;
 
-
 var changedstory = "";
-var newModalList = [];
 
 var spacing = `
 
@@ -94,7 +92,6 @@ const rellist = [
 ];
 
 export default function App() {
-
   const [PressedButtonID, setPressedButtonID] = useState(0);
   const [HP, setHP] = useState(10);
   const [Psy, setPsy] = useState(10);
@@ -103,12 +100,11 @@ export default function App() {
   const [fates, setFates] = useState(0); //mission : i값도 같이 변화시키면 사용가능
 
   //changed값을 saveData에 전달
-  const [chp2, chp] = useState(0)
-  const [cpsy2, cpsy] = useState(0)
-  const [cbullet2, cbullet] = useState(0)
+  const [chp2, chp] = useState(0);
+  const [cpsy2, cpsy] = useState(0);
+  const [cbullet2, cbullet] = useState(0);
 
-  const [relsaved, setRelSaved] = useState([])
-
+  const [listhope, setlisthope] = useState();
 
   //다크모드 버튼
   const [value, setValue] = React.useState(true);
@@ -125,50 +121,53 @@ export default function App() {
   var changedPsy = 0;
   var changedBullet = 0;
 
+  var newModalList = [];
+
   const saveData = {
     nowID: id,
     nowfate: 0,
     ui: { hp: HP, psy: Psy, bullet: Bullet },
     changedui: { chp: chp2, cpsy: cpsy2, cbullet: cbullet2 },
     reflist: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    relsave: relsaved
+    changedList: listhope,
   };
 
   const save = async () => {
-    AsyncStorage.setItem('UID123', JSON.stringify(saveData)) //string으로 감싸기
+    AsyncStorage.setItem("UID123", JSON.stringify(saveData)); //string으로 감싸기
   };
 
   const load = async () => {
     try {
       const value = await AsyncStorage.getItem("UID123");
       if (value !== null) {
-        var testid = JSON.parse(value) //json으로 풀기
+        var testid = JSON.parse(value); //json으로 풀기
         onSetPage(testid.nowID, testid.nowfate, "다시 시작"); //제목, 내용, 버튼 변화
 
-        setHP(testid.ui.hp)
-        setPsy(testid.ui.psy)
-        setBullet(testid.ui.bullet)
+        setHP(testid.ui.hp);
+        setPsy(testid.ui.psy);
+        setBullet(testid.ui.bullet);
 
-        changedHP = testid.changedui.chp
-        changedPsy = testid.changedui.cpsy
-        changedBullet = testid.changedui.cbullet //ui값 전달
+        changedHP = testid.changedui.chp;
+        changedPsy = testid.changedui.cpsy;
+        changedBullet = testid.changedui.cbullet; //ui값 전달
 
-        newModalList = testid.relsave
-
-      };
-    } catch (error) {
-    }
+        newModalList = [...changedList];
+        //문제: 최근에 추가한 id와 value만 저장됌
+        //해결 방안: cList를 만들어서 과거내역도 처리
+        saveData.reflist = [...testid.reflist];
+      }
+    } catch (error) {}
   };
 
   const clear = async () => {
-    AsyncStorage.clear()
-  }
+    AsyncStorage.clear();
+  };
 
-  useEffect(() => { load() }, [])
-
+  useEffect(() => {
+    load();
+  }, []);
 
   const StartGame = () => {
-
     SetButtonList2(
       CrossRoad[0].options.map((
         //CrossRoad[i]에서 i를 바꾸면 버튼만 바뀜
@@ -209,19 +208,20 @@ export default function App() {
 
   //인물 리스트 제작
   const makeNewModalList = (ID, value) => {
+    //최대값 확인
+    if (newModalList)
+      if (saveData.reflist[ID] < ModalList[ID].maxStep) {
+        saveData.reflist[ID] = saveData.reflist[ID] + value;
+        rellist[ID].value = saveData.reflist[ID]; //없애고 싶지만 아직 이게 있어야 버튼 수문장 가능
+      }
+
     newModalList = [
       ...newModalList,
-      { name: ModalList[ID].name, value: value, key: ID },
+      { name: ModalList[ID].name, value: saveData.reflist[ID], key: ID },
     ];
+    //예상 문제:  saveData로 의미있는 배열값이 하나만 가는거같다. spread가 이상한가
 
-    setRelSaved(newModalList)
-
-    var reflist = saveData.reflist
-
-    if (reflist[ID] < ModalList[ID].maxStep) {
-      reflist[ID] = reflist[ID] + value;
-      rellist[ID].value = reflist[ID];
-    }
+    setlisthope(newModalList);
 
     // 1. 오브젝트 중복제거
     let uniqueList = Array.from(
@@ -242,7 +242,7 @@ export default function App() {
               margin: 7,
             }}
           >
-            {list.name}: {reflist[list.key]}
+            {list.name}: {list.value}
           </Text>
         </View>
       ))
@@ -262,13 +262,13 @@ export default function App() {
       changedstory +
       spacing +
       spacing +
+      spacing +
       "-> " +
       chosenText +
       spacing +
       CrossRoad[a].text +
       spacing +
       feedback +
-      spacing +
       spacing;
     setTopText(CrossRoad[a].title);
     setDownText(changedstory);
@@ -286,8 +286,8 @@ export default function App() {
                 ? styles.ButRelT
                 : styles.ButRelF //세부 판정: 가능할때 불가능할때 색 변화
               : name.isFate == true
-                ? styles.ButFate
-                : styles.ButBasic,
+              ? styles.ButFate
+              : styles.ButBasic,
           ]}
           key={name.buttonID}
           onPress={() => {
@@ -331,8 +331,8 @@ export default function App() {
                   ? styles.relButFontT
                   : styles.relButFontF
                 : name.isFate == 1
-                  ? styles.fateButFont
-                  : styles.basicButFont,
+                ? styles.fateButFont
+                : styles.basicButFont,
             ]}
           >
             <MaterialCommunityIcons
@@ -342,8 +342,8 @@ export default function App() {
                     ? "lock-open-variant"
                     : "lock"
                   : name.isFate == 1
-                    ? "dice-multiple-outline"
-                    : "arrow-right",
+                  ? "dice-multiple-outline"
+                  : "arrow-right",
               ]}
               size={22}
               color="snow"
@@ -375,20 +375,18 @@ export default function App() {
   };
 
   const onSetUI = (hp, psy, bullet) => {
-
     changedHP = changedHP + hp;
     changedPsy = changedPsy + psy;
     changedBullet = changedBullet + bullet;
 
-    chp(changedHP)
-    cpsy(changedPsy)
-    cbullet(changedBullet)
+    chp(changedHP);
+    cpsy(changedPsy);
+    cbullet(changedBullet);
 
     setHP(HP + changedHP);
     setPsy(Psy + changedPsy);
     setBullet(Bullet + changedBullet);
   };
-
 
   const [buttonList2, SetButtonList2] = useState([
     <TouchableOpacity onPress={StartGame}>
@@ -400,8 +398,8 @@ export default function App() {
 
   const [modalrellist, setModalRelList] = useState([]);
 
-  const [downtext, setDownText] = useState([CrossRoad[id].text]);
-  const [toptext, setTopText] = useState(CrossRoad[id].title);
+  const [downtext, setDownText] = useState();
+  const [toptext, setTopText] = useState();
 
   const adminDayNight = (value) => {
     setValue(value);
