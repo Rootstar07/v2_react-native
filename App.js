@@ -118,18 +118,21 @@ export default function App() {
   const [daynightmodalmaster, setdaynightmodalmaster] = useState("#282825");
   const [daynightmodaltext, setDayNightModalText] = useState("#bbb");
 
+  //캐릭터 및 호감도
   const [isactor0, setaactor0] = useState(false);
   const [isactor1, setaactor1] = useState(false);
   const [isactor2, setaactor2] = useState(false);
+
+  const [actvalue0, setactvalue0] = useState(0);
+  const [actvalue1, setactvalue1] = useState(0);
+  const [actvalue2, setactvalue2] = useState(0);
 
   const scrollViewRef = useRef();
 
   var changedHP = 0;
   var changedPsy = 0;
   var changedBullet = 0;
-  var arr2 = [];
-
-  var newModalList = [];
+  var arrCharacter = [];
 
   const saveData = {
     nowID: id,
@@ -138,13 +141,11 @@ export default function App() {
     changedui: { chp: chp2, cpsy: cpsy2, cbullet: cbullet2 },
     reflist: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     actorlist: [
-      { name: "이지은", id: 0, is: isactor0, value: 0 },
-      { name: "김태형", id: 1, is: isactor1, value: 0 },
-      { name: "박보영", id: 2, is: isactor2, value: 0 },
+      { name: "이지은", id: 0, is: isactor0, value: actvalue0 },
+      { name: "김태형", id: 1, is: isactor1, value: actvalue1 },
+      { name: "박보영", id: 2, is: isactor2, value: actvalue2 },
     ],
   };
-
-  //logic: rel이 true일때 해당 id가 있다면 actorlist[].is는 true
 
   const save = async () => {
     AsyncStorage.setItem("UID123", JSON.stringify(saveData)); //string으로 감싸기
@@ -165,13 +166,9 @@ export default function App() {
         changedPsy = testid.changedui.cpsy;
         changedBullet = testid.changedui.cbullet; //ui값 전달
 
-        setaactor0(testid.actorlist[0].is);
-        setaactor1(testid.actorlist[1].is);
-        setaactor2(testid.actorlist[2].is);
-
         testid.actorlist.forEach((num) => {
           if (num.is === true) {
-            makeNewModalList(num.id);
+            makeNewModalList(num.id, num.value);
           }
         });
       }
@@ -227,34 +224,31 @@ export default function App() {
   };
 
   //인물 리스트 제작
+  //현재 관계도 변화가 없을때만 저장에 버그가 없음
   const makeNewModalList = (ID, value) => {
-    //최대값 확인
-    //if (saveData.reflist[ID] < ModalList[ID].maxStep) {
-    //  saveData.reflist[ID] = saveData.reflist[ID] + value;
-    //   rellist[ID].value = saveData.reflist[ID]; //없애고 싶지만 아직 이게 있어야 버튼 수문장 가능
-    //}
-
+    //id가 들어오면 해당 캐릭터의 is를 true로 변경 + load에서 true인 id를 받아옴
     if (ID == 0) {
       setaactor0(true);
-      arr2 = [...arr2, saveData.actorlist[0]];
+      saveData.actorlist[0].value = saveData.actorlist[0].value + value;
+      setactvalue0(saveData.actorlist[0].value);
+
+      arrCharacter = [...arrCharacter, saveData.actorlist[0]];
     } else if (ID == 1) {
       setaactor1(true);
-      arr2 = [...arr2, saveData.actorlist[1]];
+      saveData.actorlist[1].value = saveData.actorlist[1].value + value;
+      setactvalue1(saveData.actorlist[1].value);
+
+      arrCharacter = [...arrCharacter, saveData.actorlist[1]];
     } else if (ID == 2) {
       setaactor2(true);
-      arr2 = [...arr2, saveData.actorlist[2]];
-    } //id가 들어오면 해당 캐릭터의 is를 true로 변경 + load에서 true인 id를 받아옴
+      saveData.actorlist[2].value = saveData.actorlist[2].value + value;
+      setactvalue2(saveData.actorlist[2].value);
 
-    //{
-    //newModalList = [
-    //  ...newModalList,
-    //  { name: ModalList[ID].name, value: saveData.reflist[ID], key: ID },
-    //];
-    //saveData.changedList = [...newModalList]; //saveData로 이동 확인
-    // 1. 오브젝트 중복제거
+      arrCharacter = [...arrCharacter, saveData.actorlist[2]];
+    }
 
     let uniqueList = Array.from(
-      arr2.reduce((m, t) => m.set(t.id, t), new Map()).values()
+      arrCharacter.reduce((m, t) => m.set(t.id, t), new Map()).values()
     );
 
     setModalRelList(
@@ -270,7 +264,7 @@ export default function App() {
               margin: 7,
             }}
           >
-            {list.name}
+            {list.name} : {list.value}
           </Text>
         </View>
       ))
@@ -312,7 +306,7 @@ export default function App() {
         <TouchableOpacity
           style={[
             name.RelBut[0] == true
-              ? rellist[name.RelBut[1]].value > name.RelBut[2]
+              ? saveData.actorlist[name.RelBut[1]].value > name.RelBut[2]
                 ? styles.ButRelT
                 : styles.ButRelF //세부 판정: 가능할때 불가능할때 색 변화
               : name.isFate == true
@@ -322,7 +316,7 @@ export default function App() {
           key={name.buttonID}
           onPress={() => {
             if (name.RelBut[0] === true) {
-              if (rellist[name.RelBut[1]].value > name.RelBut[2]) {
+              if (saveData.actorlist[name.RelBut[1]].value > name.RelBut[2]) {
                 NeXtNode(
                   name.nextID,
                   name.buttonID,
@@ -416,6 +410,13 @@ export default function App() {
     setHP(HP + changedHP);
     setPsy(Psy + changedPsy);
     setBullet(Bullet + changedBullet);
+
+    if (Psy == 5) {
+      //이걸 감지못함
+      alert(":D");
+    } else {
+      alert(":o");
+    }
   };
 
   const [buttonList2, SetButtonList2] = useState([
@@ -467,7 +468,6 @@ export default function App() {
             }}
           >
             {toptext}
-            {id}
           </Text>
         </View>
         <View style={styles.textbox}>
