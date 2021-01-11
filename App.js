@@ -105,8 +105,6 @@ export default function App() {
   const [cpsy2, cpsy] = useState(0);
   const [cbullet2, cbullet] = useState(0);
 
-  const [listhope, setlisthope] = useState([1]);
-
   //{ name: ModalList[0].name, value: 0, key: 0 }
 
   //다크모드 버튼
@@ -301,6 +299,7 @@ export default function App() {
     scrollViewRef.current.scrollToEnd({ animated: true }); //스크롤 관리
 
     //버튼생성
+    //현재 버그: 관계도를 만족하는데도 저장하고 불러오면 누를수는 있는데 스타일이 안바뀜
     SetButtonList2(
       CrossRoad[a].options.map((name) => (
         <TouchableOpacity
@@ -414,8 +413,6 @@ export default function App() {
     if (Psy == 5) {
       //이걸 감지못함
       alert(":D");
-    } else {
-      alert(":o");
     }
   };
 
