@@ -414,7 +414,6 @@ export default function App() {
       //이걸 감지못함
       alert(":D");
     }
-  };
 
   const [buttonList2, SetButtonList2] = useState([
     <TouchableOpacity onPress={StartGame}>
