@@ -414,10 +414,7 @@ export default function App() {
     if (Psy == 5) {
       //이걸 감지못함
       alert(":D");
-    } else {
-      alert(":o");
     }
-  };
 
   const [buttonList2, SetButtonList2] = useState([
     <TouchableOpacity onPress={StartGame}>
