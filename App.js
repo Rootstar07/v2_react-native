@@ -116,14 +116,7 @@ export default function App() {
   const [daynightmodalmaster, setdaynightmodalmaster] = useState("#282825");
   const [daynightmodaltext, setDayNightModalText] = useState("#bbb");
 
-  //캐릭터 및 호감도
-  const [isactor0, setaactor0] = useState(false);
-  const [isactor1, setaactor1] = useState(false);
-  const [isactor2, setaactor2] = useState(false);
 
-  const [actvalue0, setactvalue0] = useState(0);
-  const [actvalue1, setactvalue1] = useState(0);
-  const [actvalue2, setactvalue2] = useState(0);
 
   const scrollViewRef = useRef();
 
